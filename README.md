@@ -25,7 +25,8 @@ Claude Code é uma ferramenta CLI e IDE extension da Anthropic que integra o mod
 ├─ 01-O-QUE-E-CLAUDE-CODE.md         → Definição, propósito, CLI vs API
 ├─ 02-CASOS-DE-USO.md                → Debugging, refatoração, geração, análise
 ├─ 03-QUANDO-USAR.md                 → Critérios e matriz de decisão
-└─ 04-LIMITACOES.md                  → Context window, custo, segurança
+├─ 04-LIMITACOES.md                  → Context window, custo, segurança
+└─ 05-HANDS-ON.md                    → 🧪 Laboratório prático com 12 exercícios
 
 📁 02-ARQUITETURA/                    (Como funciona internamente)
 ├─ 01-FLUXO-COMPLETO.md              → Diagrama ASCII do fluxo end-to-end
@@ -69,11 +70,15 @@ Claude Code é uma ferramenta CLI e IDE extension da Anthropic que integra o mod
 Dia 1-2:  01-CONCEITOS-FUNDAMENTAIS/
   ├─ O-QUE-E-CLAUDE-CODE.md (30 min)
   ├─ CASOS-DE-USO.md (30 min)
-  └─ QUANDO-USAR.md (20 min)
+  ├─ QUANDO-USAR.md (20 min)
+  └─ LIMITACOES.md (20 min)
 
-Dia 3:    02-ARQUITETURA/01-FLUXO-COMPLETO.md (45 min)
+Dia 3:    01-CONCEITOS-FUNDAMENTAIS/05-HANDS-ON.md
+  └─ Laboratório Prático (trilha iniciante: 15 min, completa: 55 min)
 
-Dia 4-5:  03-COMANDOS-SINTAXE/01-PROMPT-BASICO.md (1h)
+Dia 4:    02-ARQUITETURA/01-FLUXO-COMPLETO.md (45 min)
+
+Dia 5:    03-COMANDOS-SINTAXE/01-PROMPT-BASICO.md (1h)
 ```
 
 ### Semana 2: Técnica
@@ -110,13 +115,13 @@ Quinta:   Escolha 1 caso real do seu projeto, aplique
 
 | Módulo | Leitura | Prática | Total |
 |---|---|---|---|
-| Conceitos | 1.5h | 1h | **2.5h** |
+| Conceitos | 2h | 1h | **3h** |
 | Arquitetura | 1.5h | 0.5h | **2h** |
 | Prompting | 2h | 2h | **4h** |
 | Padrões | 2h | 3h | **5h** |
 | Casos Reais | 3h | 5h | **8h** |
 | Troubleshooting | 1h | 1h | **2h** |
-| **TOTAL** | **11h** | **12.5h** | **~23.5h** |
+| **TOTAL** | **11.5h** | **12.5h** | **~24h** |
 
 ---
 
