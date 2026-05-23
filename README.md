@@ -39,6 +39,7 @@ Claude Code é uma ferramenta CLI e IDE extension da Anthropic que integra o mod
 ├─ 01-PROMPT-BASICO.md               → Estrutura, componentes, exemplos
 ├─ 02-PADROES-DE-PROMPT.md           → Chain-of-thought, few-shot, role, etc
 ├─ 03-EXEMPLOS-REAIS.md              → 10 exemplos práticos comentados
+├─ 04-HANDS-ON.md                    → 🧪 Laboratório prático com 10 exercícios
 └─ CHEAT-SHEET.md                    → Referência rápida, atalhos, flags
 
 📁 04-PADROES-USO/                    (Técnicas e estratégias)
@@ -86,6 +87,7 @@ Dia 5:    03-COMANDOS-SINTAXE/01-PROMPT-BASICO.md (1h)
 ```
 Dia 1:    03-COMANDOS-SINTAXE/
   ├─ PADROES-DE-PROMPT.md (1h)
+  ├─ 04-HANDS-ON.md (laborátório prático: trilha iniciante 15 min, completa 50 min)
   └─ CHEAT-SHEET.md (30 min reference)
 
 Dia 2-3:  04-PADROES-USO/01-ITERACAO-RAPIDA.md (1.5h)
@@ -118,11 +120,11 @@ Quinta:   Escolha 1 caso real do seu projeto, aplique
 |---|---|---|---|
 | Conceitos | 2h | 1h | **3h** |
 | Arquitetura | 1.5h | 0.5h | **2h** |
-| Prompting | 2h | 2h | **4h** |
+| Prompting | 2h | 2.8h | **4.8h** |
 | Padrões | 2h | 3h | **5h** |
 | Casos Reais | 3h | 5h | **8h** |
 | Troubleshooting | 1h | 1h | **2h** |
-| **TOTAL** | **11.5h** | **12.5h** | **~24h** |
+| **TOTAL** | **11.5h** | **13.3h** | **~24.8h** |
 
 ---
 
