@@ -32,7 +32,8 @@ Claude Code é uma ferramenta CLI e IDE extension da Anthropic que integra o mod
 ├─ 01-FLUXO-COMPLETO.md              → Diagrama ASCII do fluxo end-to-end
 ├─ 02-COMO-FUNCIONA-INTERNAMENTE.md  → Agent loop, tool use, token management
 ├─ 03-TECNOLOGIAS-SUBJACENTES.md     → Modelos, API Anthropic, MCP, hooks, CLAUDE.md
-└─ diagrama-fluxo.png.md             → Placeholder para diagrama visual
+├─ diagrama-fluxo.png.md             → Placeholder para diagrama visual
+└─ 04-HANDS-ON.md                    → 🧪 Laboratório prático com 9 exercícios
 
 📁 03-COMANDOS-SINTAXE/               (Como fazer prompts efetivos)
 ├─ 01-PROMPT-BASICO.md               → Estrutura, componentes, exemplos
