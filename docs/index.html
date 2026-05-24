@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code — Aprenda a usar o Claude Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        header p {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .module-card h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .module-card p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-list li {
+            margin-bottom: 12px;
+        }
+
+        .topic-list a {
+            color: #3182ce;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .topic-list a:hover {
+            color: #2c5aa0;
+            text-decoration: underline;
+        }
+
+        .topic-list a::before {
+            content: "→";
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .topic-list a:hover::before {
+            opacity: 1;
+        }
+
+        footer {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            margin-top: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer a {
+            color: #3182ce;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Claude Code</h1>
+            <p>Um guia progressivo para dominar Claude Code — da teoria à prática, de conceitos fundamentais a casos reais.</p>
+        </header>
+
+        <div class="modules-grid">
+            <div class="module-card">
+                <h2><span class="emoji">📚</span> Conceitos Fundamentais</h2>
+                <p>Introdução ao Claude Code: o que é, como funciona, quando usar e limitações principais.</p>
+                <ul class="topic-list">
+                    <li><a href="./modules/01-conceitos-fundamentais.html?topic=1">O que é Claude Code?</a></li>
+                    <li><a href="./modules/01-conceitos-fundamentais.html?topic=2">Casos de Uso</a></li>
+                    <li><a href="./modules/01-conceitos-fundamentais.html?topic=3">Quando Usar</a></li>
+                    <li><a href="./modules/01-conceitos-fundamentais.html?topic=4">Limitações</a></li>
+                    <li><a href="./modules/01-conceitos-fundamentais.html?topic=5">🧪 Laboratório Prático</a></li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h2><span class="emoji">⚙️</span> Arquitetura</h2>
+                <p>Como funciona internamente: fluxo, componentes, integração e tecnologias envolvidas.</p>
+                <ul class="topic-list">
+                    <li><a href="./modules/02-arquitetura.html?topic=1">Visão Geral da Arquitetura</a></li>
+                    <li><a href="./modules/02-arquitetura.html?topic=2">Fluxo de Execução</a></li>
+                    <li><a href="./modules/02-arquitetura.html?topic=3">MCP Servers</a></li>
+                    <li><a href="./modules/02-arquitetura.html?topic=4">Hooks e Configuração</a></li>
+                    <li><a href="./modules/02-arquitetura.html?topic=5">🧪 Laboratório Prático</a></li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h2><span class="emoji">💬</span> Comandos & Sintaxe</h2>
+                <p>Aprenda a escrever prompts efetivos: sintaxe, padrões, exemplos e um cheat sheet prático.</p>
+                <ul class="topic-list">
+                    <li><a href="./modules/03-comandos-sintaxe.html?topic=1">Prompt Básico</a></li>
+                    <li><a href="./modules/03-comandos-sintaxe.html?topic=2">Padrões de Prompt</a></li>
+                    <li><a href="./modules/03-comandos-sintaxe.html?topic=3">Slash Commands</a></li>
+                    <li><a href="./modules/03-comandos-sintaxe.html?topic=4">Cheat Sheet</a></li>
+                    <li><a href="./modules/03-comandos-sintaxe.html?topic=5">🧪 Laboratório Prático</a></li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h2><span class="emoji">🎯</span> Padrões de Uso</h2>
+                <p>Técnicas e estratégias: iteração rápida, debugging, análise avançada e boas práticas.</p>
+                <ul class="topic-list">
+                    <li><a href="./modules/04-padroes-uso.html?topic=1">Iteração Rápida</a></li>
+                    <li><a href="./modules/04-padroes-uso.html?topic=2">Debugging Eficiente</a></li>
+                    <li><a href="./modules/04-padroes-uso.html?topic=3">Análise de Código</a></li>
+                    <li><a href="./modules/04-padroes-uso.html?topic=4">Boas Práticas</a></li>
+                    <li><a href="./modules/04-padroes-uso.html?topic=5">🧪 Laboratório Prático</a></li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h2><span class="emoji">🔧</span> Casos Reais</h2>
+                <p>Exemplos end-to-end: processamento de dados, geração de código, DevOps e automação.</p>
+                <ul class="topic-list">
+                    <li><a href="./modules/05-casos-reais.html?topic=1">Data Processing</a></li>
+                    <li><a href="./modules/05-casos-reais.html?topic=2">Code Generation</a></li>
+                    <li><a href="./modules/05-casos-reais.html?topic=3">DevOps & Automation</a></li>
+                    <li><a href="./modules/05-casos-reais.html?topic=4">Integração com Git</a></li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h2><span class="emoji">🐛</span> Troubleshooting</h2>
+                <p>Guia de erros comuns e soluções rápidas para quando algo não funciona como esperado.</p>
+                <ul class="topic-list">
+                    <li><a href="./modules/06-troubleshooting.html?topic=1">Erros Comuns</a></li>
+                    <li><a href="./modules/06-troubleshooting.html?topic=2">Estratégias de Debug</a></li>
+                    <li><a href="./modules/06-troubleshooting.html?topic=3">Soluções Rápidas</a></li>
+                    <li><a href="./modules/06-troubleshooting.html?topic=4">Performance Tips</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>📖 <strong>Claude Code Learning Repository</strong> — Documentação interativa e progressiva</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                <a href="https://github.com/your-repo" target="_blank">GitHub</a> |
+                <a href="https://docs.anthropic.com/claude" target="_blank">Documentação Anthropic</a> |
+                Mantido com ❤️ para a comunidade
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
