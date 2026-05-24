@@ -11,8 +11,139 @@
             line-height: 1.7;
             color: #333;
             background: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-header {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            background: #f7fafc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-section-title .emoji {
+            font-size: 1.1em;
+        }
+
+        .sidebar-links {
+            list-style: none;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 6px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            padding: 8px 12px;
+            color: #4a5568;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-links a:hover {
+            background: #edf2f7;
+            color: #2d3748;
+            border-left-color: #3182ce;
+            padding-left: 15px;
+        }
+
+        .sidebar-links a.active {
+            background: #3182ce;
+            color: white;
+            font-weight: 500;
+            border-left-color: #2c5aa0;
+        }
+
+        .sidebar-home {
+            padding: 12px;
+            margin-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .sidebar-home a {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: #3182ce;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .sidebar-home a:hover {
+            background: #2c5aa0;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        main {
+            margin-left: 280px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
         header {
             background: white;
             padding: 30px;
@@ -62,7 +193,7 @@
             flex-wrap: wrap;
             margin-top: 40px;
         }
-        .nav a, .nav button {
+        .nav a {
             padding: 12px 24px;
             border-radius: 6px;
             border: none;
@@ -79,7 +210,7 @@
             background: #2c5aa0;
             transform: translateY(-2px);
         }
-        .nav a.disabled, .nav button:disabled {
+        .nav a.disabled {
             background: #cbd5e0;
             cursor: not-allowed;
             transform: none;
@@ -92,41 +223,151 @@
         }
         footer { text-align: center; padding: 20px; color: #666; font-size: 0.9em; }
         footer a { color: #3182ce; text-decoration: none; }
+
         @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            .sidebar.open {
+                max-height: 500px;
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+            main {
+                margin-left: 0;
+            }
             .container { padding: 20px; }
             .nav { flex-direction: column; }
+            header h1 { font-size: 1.5em; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="../index.html">← Home</a> &gt; <strong>Troubleshooting</strong>
+    <button class="sidebar-toggle" id="sidebar-toggle">☰ Menu</button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">Navegação</div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">📚</span> Conceitos
+            </div>
+            <ul class="sidebar-links" id="module-01"></ul>
         </div>
 
-        <header>
-            <h1>🐛 Troubleshooting</h1>
-        </header>
-
-        <div class="content" id="content">
-            <p>Carregando...</p>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">⚙️</span> Arquitetura
+            </div>
+            <ul class="sidebar-links" id="module-02"></ul>
         </div>
 
-        <div class="nav">
-            <a href="#" id="prev-btn" class="disabled">← Anterior</a>
-            <a href="../index.html" class="home-link">↑ Menu Principal</a>
-            <a href="#" id="next-btn">Próximo →</a>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">💬</span> Comandos
+            </div>
+            <ul class="sidebar-links" id="module-03"></ul>
         </div>
 
-        <footer>
-            <p>Claude Code Learning Repository</p>
-        </footer>
-    </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🎯</span> Padrões
+            </div>
+            <ul class="sidebar-links" id="module-04"></ul>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🔧</span> Casos Reais
+            </div>
+            <ul class="sidebar-links" id="module-05"></ul>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🐛</span> Troubleshooting
+            </div>
+            <ul class="sidebar-links" id="module-06"></ul>
+        </div>
+
+        <div class="sidebar-home">
+            <a href="../index.html">← Voltar ao Menu</a>
+        </div>
+    </aside>
+
+    <main>
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../index.html">← Home</a> &gt; <strong>Troubleshooting</strong>
+            </div>
+
+            <header>
+                <h1>🐛 Troubleshooting</h1>
+            </header>
+
+            <div class="content" id="content">
+                <p>Carregando...</p>
+            </div>
+
+            <div class="nav">
+                <a href="#" id="prev-btn" class="disabled">← Anterior</a>
+                <a href="../index.html" class="home-link">↑ Menu Principal</a>
+                <a href="#" id="next-btn">Próximo →</a>
+            </div>
+
+            <footer>
+                <p>Claude Code Learning Repository</p>
+            </footer>
+        </div>
+    </main>
 
     <script>
         const topics = {"1": {"title": "01-ERROS-COMUNS", "html": "<h1>Erros Comuns e Solu\u00e7\u00f5es</h1>\n<h2>1. \"Context Too Long\"</h2>\n<h3>Problema</h3>\n<pre><code>\nError: Total tokens exceed context window limit (200k)\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Forneceu muito contexto:</p>\n<ul>\n<li>Projeto inteiro (~500 arquivos)</li>\n<li>Hist\u00f3rico de 50+ mensagens</li>\n<li>C\u00f3digo desnecess\u00e1rio</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u274c Errado:\n\"Aqui est\u00e1 meu projeto inteiro\"\n[todo o projeto]\n\n\u2705 Certo:\n\"Debugue este erro em app/views.py\"\n[apenas views.py, ~200 linhas]\n\n\u2705 Melhor ainda:\n\"Debugue erro nesta fun\u00e7\u00e3o\"\n[apenas fun\u00e7\u00e3o relevante, ~30 linhas]\n</code></pre>\n<p>---</p>\n<h2>2. \"Command Not Found\"</h2>\n<h3>Problema</h3>\n<pre><code>\nbash: pytest: command not found\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Claude rodou `pytest` mas:</p>\n<ul>\n<li>N\u00e3o instalado no ambiente</li>\n<li>N\u00e3o no PATH</li>\n<li>Wrong Python environment</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u274c N\u00e3o roda:\npytest tests/\n\n\u2705 Roda:\npython -m pytest tests/\n\n\u2705 Ou instale primeiro:\npip install pytest\npython -m pytest tests/\n</code></pre>\n<p>---</p>\n<h2>3. \"Permission Denied\"</h2>\n<h3>Problema</h3>\n<pre><code>\nPermissionError: [Errno 13] Permission denied: 'file.py'\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Claude tentou:</p>\n<ul>\n<li>Editar arquivo protegido</li>\n<li>Executar script sem permiss\u00e3o</li>\n<li>Acessar diret\u00f3rio privado</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n# Ver permiss\u00f5es\nls -la file.py\n\n# Dar permiss\u00e3o\nchmod +x file.py\n\n# Ou usar sudo (cuidado!)\nsudo nano file.py\n</code></pre>\n<p>---</p>\n<h2>4. \"Resposta Truncada\"</h2>\n<h3>Problema</h3>\n<pre><code>\n[resposta parece incompleta]\n... (truncated due to length)\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Resposta \u00e9 muito longa (sa\u00edda grande, muitos erros).</p>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u2705 Pe\u00e7a resumo:\n\"Mas em resumo, qual era o erro?\"\n\n\u2705 Pe\u00e7a por partes:\n\"Mostre apenas os 10 primeiros erros\"\n\n\u2705 Redirecione output:\npython script.py > output.txt\n# Depois: \"Leia output.txt e me mostre os erros\"\n</code></pre>\n<p>---</p>\n<h2>5. \"Claude N\u00e3o Lembrou\"</h2>\n<h3>Problema</h3>\n<pre><code>\nVoc\u00ea: \"Agora refatore views.py\"\nClaude: \"Qual \u00e9 views.py?\"\n(Voc\u00ea j\u00e1 forneceu na mensagem anterior)\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Contexto \u00e9 preservado na mesma sess\u00e3o, mas:</p>\n<ul>\n<li>Se forneceu em prompt 1, prompt 2 \u00e9 amb\u00edguo</li>\n<li>Hist\u00f3rico foi limpado (voc\u00ea usou /clear)</li>\n<li>Contexto foi compactado (muitas mensagens)</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u274c Amb\u00edguo:\n\"Refatore views.py\"\n\n\u2705 Claro:\n\"Refatore views.py (que voc\u00ea acabou de ler)\"\n[ou forne\u00e7a novamente]\n\n\u2705 Use CLAUDE.md para contexto persistente:\n\"Contexto est\u00e1 em CLAUDE.md\"\n</code></pre>\n<p>---</p>\n<h2>6. \"Erro Ao Editar Arquivo\"</h2>\n<h3>Problema</h3>\n<pre><code>\nEdit failed: old_string not found\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Claude tentou Edit tool mas:</p>\n<ul>\n<li>C\u00f3digo mudou entre leitura e edi\u00e7\u00e3o</li>\n<li>String exata n\u00e3o encontrada</li>\n<li>Indenta\u00e7\u00e3o diferente</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u2705 Forne\u00e7a contexto maior:\n\"Leia views.py novamente (pode ter mudado)\"\n\n\u2705 Use novo prompt:\n\"Edite views.py: remova fun\u00e7\u00e3o X\"\n(Claude rel\u00ea primeiro)\n\n\u2705 Use Write em vez de Edit (para reescrever):\n\"Reescreva views.py com...\"\n</code></pre>\n<p>---</p>\n<h2>7. \"Teste Falhando\"</h2>\n<h3>Problema</h3>\n<pre><code>\nFAILED test_auth.py::test_login - AssertionError\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Claude gerou c\u00f3digo mas:</p>\n<ul>\n<li>Edge case n\u00e3o coberto</li>\n<li>Mock de BD incorreto</li>\n<li>L\u00f3gica n\u00e3o testa o que acha</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u2705 Fornecedor teste falhando:\n\"Teste falha com este erro: [error]\n[forne\u00e7a fun\u00e7\u00e3o testada]\nO que est\u00e1 errado?\"\n\n\u2705 Pe\u00e7a para validar manualmente:\n\"Rode pytest test_auth.py -vv\"\n[Claude v\u00ea erro completo]\n</code></pre>\n<p>---</p>\n<h2>8. \"API Rate Limit Atingido\"</h2>\n<h3>Problema</h3>\n<pre><code>\nError: Rate limit exceeded (429)\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Muitas chamadas \u00e0 API Anthropic:</p>\n<ul>\n<li>Trocas r\u00e1pidas demais</li>\n<li>Contexto grande repetido</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u2705 Aguarde:\n\"Aguarde 60 segundos e tente novamente\"\n\n\u2705 Use Haiku (mais barato):\n\"/model haiku\"\nDepois continue\n\n\u2705 Combine prompts:\n\"Passo 1 + 2 + 3 em um prompt\"\n(1 chamada em vez de 3)\n</code></pre>\n<p>---</p>\n<h2>9. \"C\u00f3digo Gerado N\u00e3o Funciona\"</h2>\n<h3>Problema</h3>\n<pre><code>\nC\u00f3digo de Claude rodou mas l\u00f3gica est\u00e1 errada\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>Claude:</p>\n<ul>\n<li>N\u00e3o entendeu requisito</li>\n<li>Suposi\u00e7\u00e3o errada</li>\n<li>N\u00e3o viu edge case</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u2705 Forne\u00e7a evid\u00eancia:\n\"Esperado: X, Recebido: Y\nInput que quebrou: Z\"\n\n\u2705 Mostre erro espec\u00edfico:\n\"Rodi e recebei: [traceback]\"\n\n\u2705 Corrija iterativamente:\n\"Mas preciso tamb\u00e9m...\"\n[refinamento]\n</code></pre>\n<p>---</p>\n<h2>10. \"M\u00f3dulo Python N\u00e3o Encontrado\"</h2>\n<h3>Problema</h3>\n<pre><code>\nModuleNotFoundError: No module named 'requests'\n</code></pre>\n<h3>Por Qu\u00ea</h3>\n<p>C\u00f3digo usa m\u00f3dulo mas:</p>\n<ul>\n<li>N\u00e3o est\u00e1 instalado</li>\n<li>Venv n\u00e3o ativado</li>\n<li>Wrong Python version</li>\n</ul>\n<h3>Solu\u00e7\u00e3o</h3>\n<pre><code>\n\u2705 Instale depend\u00eancia:\npip install requests\n\n\u2705 Ou use venv:\nsource venv/bin/activate\npip install -r requirements.txt\n\n\u2705 Verifique Python:\npython --version\n</code></pre>\n<p>---</p>\n<h2>Tabela de Troubleshooting R\u00e1pida</h2>\n<p>| Erro | Causa | Fix |</p>\n<p>|---|---|---|</p>\n<p>| Context too long | Contexto grande | Remova c\u00f3digo n\u00e3o-relevante |</p>\n<p>| Command not found | M\u00f3dulo n\u00e3o instalado | pip install / use Python path |</p>\n<p>| Permission denied | Arquivo protegido | chmod +x ou sudo |</p>\n<p>| Edit failed | String n\u00e3o found | Releia arquivo, use Write |</p>\n<p>| Test failing | L\u00f3gica errada | Fornecedor teste output |</p>\n<p>| Rate limited | Muitas requisi\u00e7\u00f5es | Aguarde ou use Haiku |</p>\n<p>| Response truncated | Output muito grande | Pe\u00e7a resumo ou split |</p>\n<p>| Claude n\u00e3o lembrou | Contexto perdido | Forne\u00e7a novamente |</p>\n<p>| Module not found | N\u00e3o instalado | pip install |</p>\n<p>| Weird behavior | Suposi\u00e7\u00e3o errada | Refine requisito |</p>\n<p>---</p>\n<h2>Checklist: Antes de Pedir Help</h2>\n<ul>\n<li>[ ] Erro exato (copie stack trace completo)?</li>\n<li>[ ] J\u00e1 tentei isso sozinho? (como?)</li>\n<li>[ ] Contexto fornecido (arquivo relevante)?</li>\n<li>[ ] C\u00f3digo est\u00e1 vis\u00edvel (pode Claude ver)?</li>\n<li>[ ] Input/output esperado vs recebido?</li>\n<li>[ ] Ambiente (Python version, packages)?</li>\n</ul>\n<p>Se sim em 5+: pronto para pedir help a Claude</p>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"02-COMO-DEBUGAR.md\">Como Debugar</a></p>"}, "2": {"title": "02-COMO-DEBUGAR", "html": "<h1>Como Debugar com Claude Code</h1>\n<h2>Passo 1: Isolar o Problema</h2>\n<h3>Minimize</h3>\n<pre><code>\n\u274c Grande (500 linhas, vago):\n\"Meu c\u00f3digo n\u00e3o funciona\"\n\n\u2705 Pequeno (10 linhas, espec\u00edfico):\n\"Fun\u00e7\u00e3o X retorna None quando devia retornar User\nInput: user_id=999\"\n</code></pre>\n<h3>Reproduzir Consistentemente</h3>\n<pre><code>\nAnote:\n- Input exato (n\u00fameros, strings)\n- Output recebido\n- Output esperado\n- Frequ\u00eancia (sempre? aleat\u00f3rio?)\n</code></pre>\n<h3>Exemplo</h3>\n<pre><code>\n# Meu c\u00f3digo\ndef get_user(user_id: int) -> User:\n    return User.objects.get(id=user_id)\n\n# Problema\nget_user(999)\n# Esperado: levanta User.DoesNotExist\n# Recebido: levanta AttributeError (None.id)\n# Frequ\u00eancia: sempre quando user_id n\u00e3o existe\n</code></pre>\n<p>---</p>\n<h2>Passo 2: Forne\u00e7a Evid\u00eancia</h2>\n<h3>Stack Trace Completo</h3>\n<pre><code>\n# Isso:\nTypeError: unsupported operand type(s)\n\n# N\u00e3o ajuda.\n\n# Forne\u00e7a completo:\nTraceback (most recent call last):\n  File \"payment.py\", line 42, in process_payment\n    result = amount + currency\nTypeError: unsupported operand type(s) for +: 'float' and 'str'\n</code></pre>\n<h3>C\u00f3digo Relevante</h3>\n<pre><code>\n# \u274c Grande demais:\n[arquivo inteiro de 500 linhas]\n\n# \u2705 Focado:\ndef process_payment(amount: float, currency: str):\n    result = amount + currency  # \u274c Aqui d\u00e1 erro\n    return result\n\n# \u2705 Com contexto:\nprocess_payment(100, \"USD\")\n# Erro: TypeError...\n</code></pre>\n<h3>Input/Output</h3>\n<pre><code>\n\u274c Vago:\n\"Erro ao processar\"\n\n\u2705 Espec\u00edfico:\nInput: amount=100, currency=\"USD\"\nExpected: {\"amount\": 100, \"currency\": \"USD\"}\nReceived: TypeError at line 42\n</code></pre>\n<p>---</p>\n<h2>Passo 3: An\u00e1lise com Claude</h2>\n<h3>Claude V\u00ea C\u00f3digo</h3>\n<p>Claude l\u00ea sua fun\u00e7\u00e3o e v\u00ea:</p>\n<pre><code>\nresult = amount + currency\n# amount \u00e9 float, currency \u00e9 string\n# N\u00e3o d\u00e1 somar float + string \u2192 TypeError\n</code></pre>\n<h3>Claude Prop\u00f5e Hip\u00f3teses</h3>\n<pre><code>\n1. Convers\u00e3o de tipo faltando?\n2. Suposi\u00e7\u00e3o errada sobre tipo?\n3. API mudou signature?\n</code></pre>\n<h3>Voc\u00ea Valida</h3>\n<pre><code>\n\"Sim, amount \u00e9 float, currency \u00e9 string.\nPrecisa converter currency para float antes?\"\n</code></pre>\n<h3>Claude Confirma e Fixa</h3>\n<pre><code>\n# Fix:\namount_value = float(currency)  # Converte \"USD\" para n\u00famero\n# Mas... \"USD\" n\u00e3o \u00e9 n\u00famero!\n\n# Verdadeiro fix:\n# Talvez currency n\u00e3o devia ser string?\n# Ou precisa lookup de taxa de c\u00e2mbio?\n</code></pre>\n<p>---</p>\n<h2>Estrat\u00e9gias de Debugging</h2>\n<h3>1. Divide and Conquer (Divide para Conquistar)</h3>\n<p>Teste parte por parte:</p>\n<pre><code>\n# Seu c\u00f3digo:\ndef calculate_total(items: list) -> float:\n    subtotal = sum(item['price'] * item['qty'] for item in items)\n    tax = subtotal * 0.1\n    discount = apply_discount(subtotal)\n    return subtotal + tax - discount\n\n# Teste cada parte:\nitem = {'price': 100, 'qty': 2}\nsubtotal_test = item['price'] * item['qty']  # Funciona?\ntax_test = subtotal_test * 0.1  # Funciona?\ndiscount_test = apply_discount(subtotal_test)  # Aqui quebra?\n</code></pre>\n<p><strong>Descoberta</strong>: Erro est\u00e1 em `apply_discount()`</p>\n<h3>2. Print Debugging</h3>\n<pre><code>\ndef calculate_total(items: list) -> float:\n    subtotal = sum(item['price'] * item['qty'] for item in items)\n    print(f\"DEBUG: subtotal = {subtotal}\")  # V\u00ea valor intermedi\u00e1rio\n    \n    tax = subtotal * 0.1\n    print(f\"DEBUG: tax = {tax}\")\n    \n    discount = apply_discount(subtotal)\n    print(f\"DEBUG: discount = {discount}\")\n    \n    return subtotal + tax - discount\n\n# Output:\n# DEBUG: subtotal = 200\n# DEBUG: tax = 20\n# DEBUG: discount = <None tipo aqui>  \u2190 PROBLEMA\n</code></pre>\n<h3>3. Breakpoint Debugging</h3>\n<p>Para Python:</p>\n<pre><code>\ndef calculate_total(items: list) -> float:\n    subtotal = sum(...)\n    breakpoint()  # Pausa aqui\n    tax = ...\n    return ...\n\n# Claude executa e v\u00ea estado da mem\u00f3ria\n</code></pre>\n<h3>4. Type Checking</h3>\n<pre><code>\ndef calculate_total(items: list) -> float:\n    subtotal = sum(item['price'] * item['qty'] for item in items)\n    \n    # Valide tipos:\n    assert isinstance(subtotal, (int, float)), f\"subtotal must be number, got {type(subtotal)}\"\n    \n    tax = subtotal * 0.1\n    return subtotal + tax\n</code></pre>\n<p>---</p>\n<h2>Exemplo: Debugging Real</h2>\n<h3>Seu Relato</h3>\n<pre><code>\nFun\u00e7\u00e3o `validate_email` retorna False para emails v\u00e1lidos.\n\nC\u00f3digo:\ndef validate_email(email: str) -> bool:\n    pattern = r\"^[a-z]+@[a-z]+\\.[a-z]+$\"\n    return bool(re.match(pattern, email))\n\nTeste:\n- validate_email(\"user@example.com\") \u2192 True \u2705\n- validate_email(\"user.name@example.com\") \u2192 False \u274c (deveria ser True)\n- validate_email(\"user+tag@example.com\") \u2192 False \u274c (deveria ser True)\n\nQual \u00e9 o problema?\n</code></pre>\n<h3>Claude V\u00ea Problema</h3>\n<pre><code>\nPadr\u00e3o regex: ^[a-z]+@[a-z]+\\.[a-z]+$\n\nAceita: abc@def.com (\u2705)\nRejeita: user.name@example.com (\u274c porque tem ponto em 'user.name')\nRejeita: user+tag@example.com (\u274c porque tem + que n\u00e3o est\u00e1 no padr\u00e3o)\n\nO regex \u00e9 muito restritivo!\n</code></pre>\n<h3>Claude Sugere</h3>\n<pre><code>\n# Melhor padr\u00e3o:\npattern = r\"^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}$\"\n\n# Ou use library:\nfrom email_validator import validate_email, EmailNotValidError\n\ndef validate_email(email: str) -> bool:\n    try:\n        validate_email(email)\n        return True\n    except EmailNotValidError:\n        return False\n</code></pre>\n<h3>Voc\u00ea Valida</h3>\n<pre><code>\nTestei novo padr\u00e3o:\n- user@example.com \u2705\n- user.name@example.com \u2705\n- user+tag@example.com \u2705\n- invalid.email \u274c\n\nFuncionou!\n</code></pre>\n<p>---</p>\n<h2>Ferramentas de Debug</h2>\n<h3>Python</h3>\n<pre><code>\n- pdb: breakpoints e step through\n- ipdb: vers\u00e3o melhor de pdb\n- pudb: TUI debugger\n- memory_profiler: memory leaks\n- cProfile: performance profiling\n</code></pre>\n<h3>Bash</h3>\n<pre><code>\n- set -x: mostra cada comando\n- set -e: sai em qualquer erro\n- echo statements: output intermedi\u00e1rio\n- shellcheck: lint para shell scripts\n</code></pre>\n<h3>Git</h3>\n<pre><code>\ngit log --all --oneline  # Ver hist\u00f3rico completo\ngit blame filename       # Quem mexeu em cada linha\ngit bisect              # Encontrar commit que quebrou\n</code></pre>\n<p>---</p>\n<h2>Checklist de Debug</h2>\n<ul>\n<li>[ ] Isolei o problema (fun\u00e7\u00e3o espec\u00edfica)?</li>\n<li>[ ] Reprodu\u00e7o consistentemente?</li>\n<li>[ ] Forneci stack trace completo?</li>\n<li>[ ] Forneci c\u00f3digo relevante (~50 linhas max)?</li>\n<li>[ ] Forneci input/output esperado vs recebido?</li>\n<li>[ ] J\u00e1 testei partes isoladamente?</li>\n<li>[ ] Removi print/debugging statements antes de pedir help?</li>\n</ul>\n<p>Se OK em 6+: Pronto para debug com Claude</p>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"03-SOLUCOES-RAPIDAS.md\">Solu\u00e7\u00f5es R\u00e1pidas</a></p>"}, "3": {"title": "03-SOLUCOES-RAPIDAS", "html": "<h1>Solu\u00e7\u00f5es R\u00e1pidas</h1>\n<h2>Lookup Table: Problema \u2192 Solu\u00e7\u00e3o</h2>\n<h3>Python - ImportError / ModuleNotFoundError</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `ModuleNotFoundError: requests` | `pip install requests` |</p>\n<p>| `ImportError: cannot import name X` | `pip install --upgrade package` |</p>\n<p>| Diferentes `requests` na venv e global | `which python` (verificar venv ativo) |</p>\n<p>| `ModuleNotFoundError` no test | `PYTHONPATH=. pytest tests/` |</p>\n<h3>Python - TypeError / AttributeError</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `TypeError: 'NoneType' object is not subscriptable` | Verifique se retorna None |</p>\n<p>| `AttributeError: 'str' object has no attribute 'items'` | Verificar tipo (dict vs string?) |</p>\n<p>| `TypeError: unsupported operand type(s) for +: 'str' and 'int'` | Converter tipo: `int(var)` |</p>\n<p>| `KeyError: 'field'` | Verificar se chave existe em dict |</p>\n<h3>Python - Database / ORM</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `ProgrammingError: relation \"users\" does not exist` | Rodar migrations: `python manage.py migrate` |</p>\n<p>| `IntegrityError: duplicate key value` | Verificar unique constraints |</p>\n<p>| `OperationalError: too many connections` | Pool de conex\u00e3o cheio, aumentar `CONN_MAX_AGE` |</p>\n<p>| `N+1 query problem` | Usar `select_related()` ou `prefetch_related()` |</p>\n<h3>Django Espec\u00edfico</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `DisallowedHost` | Adicionar dom\u00ednio em `ALLOWED_HOSTS` |</p>\n<p>| `CSRF verification failed` | Adicionar `csrf_token` em template |</p>\n<p>| Static files 404 | `python manage.py collectstatic` |</p>\n<p>| Template not found | Verificar `TEMPLATES` em settings |</p>\n<h3>JavaScript / Node</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `Cannot find module 'X'` | `npm install X` |</p>\n<p>| `Port 3000 already in use` | `lsof -i :3000` (kill processo) |</p>\n<p>| `React Hook called in wrong context` | Mover hook para dentro de componente |</p>\n<p>| `CORS error` | Adicionar header em servidor: `Access-Control-Allow-Origin` |</p>\n<h3>Git / Version Control</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `fatal: not a git repository` | `git init` ou clone repo |</p>\n<p>| `Your branch is ahead of 'origin/main'` | `git push` para sincronizar |</p>\n<p>| `merge conflict` | Editar arquivo, resolver, `git add .`, `git commit` |</p>\n<p>| `detached HEAD` | `git checkout main` |</p>\n<h3>Docker</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `port already in use` | `docker ps` (ver containers), `docker stop <id>` |</p>\n<p>| `image not found` | `docker build -t myapp .` |</p>\n<p>| `permission denied` | `sudo docker` ou adicionar user ao grupo docker |</p>\n<p>| `Out of disk space` | `docker prune` (limpeza) |</p>\n<h3>Database / SQL</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `Connection refused (5432)` | Verificar se PostgreSQL rodando: `psql --version` |</p>\n<p>| `authentication failed` | Checar credentials em `DATABASE_URL` |</p>\n<p>| `syntax error` | Rodar SQL em editor com syntax highlighting |</p>\n<p>| `query timeout` | Adicionar index: `CREATE INDEX idx_name ON table(field)` |</p>\n<h3>Environment / Setup</h3>\n<p>| Problema | Solu\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| `command not found: python3` | Install Python 3 (apt, brew, etc) |</p>\n<p>| `pip: command not found` | `python -m pip` ou instalar pip |</p>\n<p>| `.env not loading` | Verificar formato: `KEY=VALUE` (sem espa\u00e7os) |</p>\n<p>| `Permission denied: file.py` | `chmod +x file.py` |</p>\n<p>---</p>\n<h2>Quick Fixes (Um-liner)</h2>\n<pre><code>\n# Python\npython -m pip install -U pip                    # Atualizar pip\npip list | grep requests                        # Ver se pacote instalado\npython -m pytest tests/ -v                      # Rodar tests verboso\npython -m pdb script.py                         # Debug com pdb\n\n# Django\npython manage.py makemigrations && \\\n  python manage.py migrate                      # Migrations\npython manage.py createsuperuser                # Admin user\npython manage.py shell_plus                     # Shell interativo (se django-extensions)\n\n# Git\ngit log --oneline -n 10                         # \u00daltimas 10 commits\ngit diff filename                               # Ver mudan\u00e7as\ngit status                                      # Estado current\ngit reset --hard HEAD~1                         # Desfazer \u00faltimo commit (cuidado!)\n\n# Docker\ndocker ps -a                                    # Ver containers\ndocker logs <container>                         # Ver logs\ndocker exec -it <container> bash               # Entrar em container\ndocker build -t myapp:1.0 .                    # Build imagem\n\n# Node/npm\nnpm install && npm start                        # Install + run\nnpm list --depth=0                              # Ver vers\u00e3o de pacotes top-level\nnpm update                                      # Atualizar tudo\nnpx create-react-app myapp                     # Criar novo React app\n\n# PostgreSQL\npsql -U user -d database                        # Conectar\n\\dt                                             # Listar tabelas\n\\d tablename                                    # Ver schema\npsql -f backup.sql                              # Restaurar backup\n\n# Linux/Mac\nwhich python                                    # Achar execut\u00e1vel\nsource venv/bin/activate                       # Ativar venv\ndeactivate                                      # Desativar venv\nlsof -i :PORT                                   # Qual processo usa PORT\nkill -9 PID                                     # Matar processo\n</code></pre>\n<p>---</p>\n<h2>Conhecimento Compartilhado</h2>\n<h3>Venv Setup (Comum)</h3>\n<pre><code>\n# Create\npython -m venv venv\n\n# Activate\nsource venv/bin/activate          # Linux/Mac\nvenv\\Scripts\\activate              # Windows\n\n# Install\npip install -r requirements.txt\n</code></pre>\n<h3>Django Setup (Comum)</h3>\n<pre><code>\n# Criar projeto\ndjango-admin startproject mysite\n\n# Criar app\npython manage.py startapp myapp\n\n# Migrations\npython manage.py makemigrations\npython manage.py migrate\n\n# Rodar\npython manage.py runserver\n</code></pre>\n<h3>FastAPI Setup (Comum)</h3>\n<pre><code>\n# Install\npip install fastapi uvicorn\n\n# main.py\nfrom fastapi import FastAPI\napp = FastAPI()\n\n@app.get(\"/\")\ndef read_root():\n    return {\"Hello\": \"World\"}\n\n# Rodar\nuvicorn main:app --reload\n</code></pre>\n<h3>React Setup (Comum)</h3>\n<pre><code>\n# Create\nnpx create-react-app myapp\n\n# Run\ncd myapp\nnpm start\n\n# Build\nnpm run build\n</code></pre>\n<p>---</p>\n<h2>Recursos \u00dateis</h2>\n<p>| Recurso | Fun\u00e7\u00e3o |</p>\n<p>|---|---|</p>\n<p>| StackOverflow | Buscar erro (99% das vezes j\u00e1 foi respondido) |</p>\n<p>| Official Docs | Python.org, Django docs, React docs |</p>\n<p>| ChatGPT / Claude | Explicar erro, brainstorm solu\u00e7\u00e3o |</p>\n<p>| Your Team | Algu\u00e9m j\u00e1 viu isso antes? |</p>\n<p>| Google | \"python {error}\" ou \"django {error}\" |</p>\n<p>---</p>\n<h2>\u00daltima Op\u00e7\u00e3o: Escalate</h2>\n<p>Se tudo falhar:</p>\n<pre><code>\nSeu relato para Claude:\n1. Stack trace completo\n2. C\u00f3digo relevante (20-50 linhas)\n3. O que j\u00e1 tentou\n4. Ambiente (Python 3.11, Django 4.2, PostgreSQL 14)\n5. Comando exato que rodou\n\nExemplo:\n</code></pre>\n<p>Erro: TypeError: unsupported operand type(s) for -: 'str' and 'int'</p>\n<p>C\u00f3digo (payment.py line 42):</p>\n<p>result = tax_amount - discount_percentage</p>\n<p>Input: tax_amount=\"$50\", discount_percentage=10</p>\n<p>Esperado: 50 - 10 = 40</p>\n<p>Recebido: TypeError</p>\n<p>Tentei:</p>\n<ul>\n<li>Converter para float: float(tax_amount) \u2192 ValueError</li>\n<li>Remover \"$\": tax_amount.replace(\"$\", \"\") \u2192 funciona</li>\n</ul>\n<p>Mas acho estranho. Qual \u00e9 a root cause?</p>\n<pre><code>\n\nClaude conseguir\u00e1 ajudar!\n\n---\n\n**Voltar**: [Erros Comuns](01-ERROS-COMUNS.md)\n\n</code></pre>"}};
         let current = parseInt(new URLSearchParams(window.location.search).get('topic') || '1');
         const total = 3;
+        const currentModule = '06';
+
+        const allModules = {
+            '01': ['Conceitos Fundamentais', 5],
+            '02': ['Arquitetura', 5],
+            '03': ['Comandos & Sintaxe', 5],
+            '04': ['Padrões de Uso', 5],
+            '05': ['Casos Reais', 4],
+            '06': ['Troubleshooting', 4],
+        };
+
+        const moduleFiles = {
+            '01': '01-conceitos-fundamentais',
+            '02': '02-arquitetura',
+            '03': '03-comandos--sintaxe',
+            '04': '04-padrões-de-uso',
+            '05': '05-casos-reais',
+            '06': '06-troubleshooting',
+        };
+
+        function buildSidebar() {
+            Object.entries(allModules).forEach(([modNum, [modName, topicCount]]) => {
+                const container = document.getElementById(`module-${modNum}`);
+                for (let i = 1; i <= topicCount; i++) {
+                    const link = document.createElement('a');
+                    link.href = `${moduleFiles[modNum]}.html?topic=${i}`;
+                    link.textContent = `Tópico ${i}`;
+                    if (modNum === currentModule && i === current) {
+                        link.classList.add('active');
+                    }
+                    container.appendChild(document.createElement('li')).appendChild(link);
+                }
+            });
+        }
 
         function render(n) {
             if (!topics[n]) return;
@@ -136,17 +377,37 @@
             document.getElementById('next-btn').href = current < total ? `?topic=${current + 1}` : '#';
             document.getElementById('next-btn').classList.toggle('disabled', current === total);
             window.history.replaceState({}, '', `?topic=${current}`);
+
+            // Update active link in sidebar
+            document.querySelectorAll('.sidebar-links a').forEach(a => {
+                a.classList.remove('active');
+            });
+            const currentLink = document.querySelector(`.sidebar-links a[href="${moduleFiles[currentModule]}.html?topic=${current}"]`);
+            if (currentLink) currentLink.classList.add('active');
         }
 
         document.getElementById('prev-btn').addEventListener('click', (e) => {
             if (current > 1) { current--; render(current); }
             e.preventDefault();
         });
+
         document.getElementById('next-btn').addEventListener('click', (e) => {
             if (current < total) { current++; render(current); }
             e.preventDefault();
         });
 
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        // Close sidebar on link click (mobile)
+        document.querySelectorAll('.sidebar-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('open');
+            });
+        });
+
+        buildSidebar();
         render(current);
     </script>
 </body>

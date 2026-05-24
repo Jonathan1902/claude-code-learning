@@ -11,8 +11,139 @@
             line-height: 1.7;
             color: #333;
             background: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-header {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            background: #f7fafc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-section-title .emoji {
+            font-size: 1.1em;
+        }
+
+        .sidebar-links {
+            list-style: none;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 6px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            padding: 8px 12px;
+            color: #4a5568;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-links a:hover {
+            background: #edf2f7;
+            color: #2d3748;
+            border-left-color: #3182ce;
+            padding-left: 15px;
+        }
+
+        .sidebar-links a.active {
+            background: #3182ce;
+            color: white;
+            font-weight: 500;
+            border-left-color: #2c5aa0;
+        }
+
+        .sidebar-home {
+            padding: 12px;
+            margin-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .sidebar-home a {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: #3182ce;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .sidebar-home a:hover {
+            background: #2c5aa0;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        main {
+            margin-left: 280px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
         header {
             background: white;
             padding: 30px;
@@ -62,7 +193,7 @@
             flex-wrap: wrap;
             margin-top: 40px;
         }
-        .nav a, .nav button {
+        .nav a {
             padding: 12px 24px;
             border-radius: 6px;
             border: none;
@@ -79,7 +210,7 @@
             background: #2c5aa0;
             transform: translateY(-2px);
         }
-        .nav a.disabled, .nav button:disabled {
+        .nav a.disabled {
             background: #cbd5e0;
             cursor: not-allowed;
             transform: none;
@@ -92,41 +223,151 @@
         }
         footer { text-align: center; padding: 20px; color: #666; font-size: 0.9em; }
         footer a { color: #3182ce; text-decoration: none; }
+
         @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            .sidebar.open {
+                max-height: 500px;
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+            main {
+                margin-left: 0;
+            }
             .container { padding: 20px; }
             .nav { flex-direction: column; }
+            header h1 { font-size: 1.5em; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="../index.html">← Home</a> &gt; <strong>Arquitetura</strong>
+    <button class="sidebar-toggle" id="sidebar-toggle">☰ Menu</button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">Navegação</div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">📚</span> Conceitos
+            </div>
+            <ul class="sidebar-links" id="module-01"></ul>
         </div>
 
-        <header>
-            <h1>⚙️ Arquitetura</h1>
-        </header>
-
-        <div class="content" id="content">
-            <p>Carregando...</p>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">⚙️</span> Arquitetura
+            </div>
+            <ul class="sidebar-links" id="module-02"></ul>
         </div>
 
-        <div class="nav">
-            <a href="#" id="prev-btn" class="disabled">← Anterior</a>
-            <a href="../index.html" class="home-link">↑ Menu Principal</a>
-            <a href="#" id="next-btn">Próximo →</a>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">💬</span> Comandos
+            </div>
+            <ul class="sidebar-links" id="module-03"></ul>
         </div>
 
-        <footer>
-            <p>Claude Code Learning Repository</p>
-        </footer>
-    </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🎯</span> Padrões
+            </div>
+            <ul class="sidebar-links" id="module-04"></ul>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🔧</span> Casos Reais
+            </div>
+            <ul class="sidebar-links" id="module-05"></ul>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🐛</span> Troubleshooting
+            </div>
+            <ul class="sidebar-links" id="module-06"></ul>
+        </div>
+
+        <div class="sidebar-home">
+            <a href="../index.html">← Voltar ao Menu</a>
+        </div>
+    </aside>
+
+    <main>
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../index.html">← Home</a> &gt; <strong>Arquitetura</strong>
+            </div>
+
+            <header>
+                <h1>⚙️ Arquitetura</h1>
+            </header>
+
+            <div class="content" id="content">
+                <p>Carregando...</p>
+            </div>
+
+            <div class="nav">
+                <a href="#" id="prev-btn" class="disabled">← Anterior</a>
+                <a href="../index.html" class="home-link">↑ Menu Principal</a>
+                <a href="#" id="next-btn">Próximo →</a>
+            </div>
+
+            <footer>
+                <p>Claude Code Learning Repository</p>
+            </footer>
+        </div>
+    </main>
 
     <script>
         const topics = {"1": {"title": "01-FLUXO-COMPLETO", "html": "<h1>Fluxo Completo do Claude Code</h1>\n<h2>Diagrama ASCII do Fluxo</h2>\n<pre><code>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502                      USU\u00c1RIO DIGITA PROMPT                       \u2502\n\u2502              \"Refatore este arquivo para melhorar\"               \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                             \u2502\n                             \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502                  CLAUDE CODE PROCESSA ENTRADA                    \u2502\n\u2502  - Carrega CLAUDE.md (contexto do projeto)                      \u2502\n\u2502  - Identifica arquivo atual (context)                           \u2502\n\u2502  - Prepara mensagem para Claude API                             \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                             \u2502\n                             \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502               CLAUDE API (MODEL + TOOL USE)                      \u2502\n\u2502  - Recebe prompt + contexto                                     \u2502\n\u2502  - Analisa e decide ferramenta necess\u00e1ria                       \u2502\n\u2502  - Retorna: \"usar Read tool para arquivo\"                       \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                             \u2502\n                    \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n                    \u2502                 \u2502\n                    \u25bc                 \u25bc\n        \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n        \u2502  LOOP DE TOOL USE \u2502  \u2502   TOOL CALL     \u2502\n        \u2502                  \u2502  \u2502   (Read file)    \u2502\n        \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                 \u2502                     \u2502\n                 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                           \u2502\n                           \u25bc\n        \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n        \u2502 FERRAMENTA EXECUTA              \u2502\n        \u2502 - L\u00ea arquivo                     \u2502\n        \u2502 - Retorna conte\u00fado               \u2502\n        \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                             \u2502\n                             \u25bc\n        \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n        \u2502 RESULTADO INTEGRADO              \u2502\n        \u2502 - Claude analisa c\u00f3digo          \u2502\n        \u2502 - Prop\u00f5e refatora\u00e7\u00e3o             \u2502\n        \u2502 - Decide: precisa Edit tool      \u2502\n        \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                             \u2502\n        \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n        \u2502                                         \u2502\n        \u25bc                                         \u25bc\n  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510              \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n  \u2502   Edit Tool      \u2502              \u2502  Resposta        \u2502\n  \u2502 (modifica arquivo)\u2502              \u2502  para Usu\u00e1rio    \u2502\n  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518              \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n           \u2502                                  \u2502\n           \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                          \u2502\n                          \u25bc\n        \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n        \u2502 ARQUIVO MODIFICADO + EXPLICA\u00c7\u00c3O  \u2502\n        \u2502 - Altera\u00e7\u00f5es aplicadas           \u2502\n        \u2502 - Explica\u00e7\u00e3o do porqu\u00ea           \u2502\n        \u2502 - Pr\u00f3ximos passos sugeridos      \u2502\n        \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n</code></pre>\n<p>---</p>\n<h2>Fases Detalhadas</h2>\n<h3>1. **Inicializa\u00e7\u00e3o**</h3>\n<pre><code>\nUsu\u00e1rio \u2192 Claude Code\n\u2193\nCarrega:\n- Arquivo atual\n- CLAUDE.md (se existir)\n- Hist\u00f3rico de sess\u00e3o (tokens usados)\n- Modelo selecionado\n</code></pre>\n<h3>2. **Processamento do Prompt**</h3>\n<pre><code>\nPrompt em linguagem natural\n    \u2193\nParse de inten\u00e7\u00e3o\n    \u2193\nMontagem de contexto (file content + CLAUDE.md)\n    \u2193\nChamada \u00e0 API Anthropic\n</code></pre>\n<h3>3. **Tool Use Loop**</h3>\n<p>Claude pode:</p>\n<ul>\n<li><strong>Read</strong>: Ler arquivo</li>\n<li><strong>Edit</strong>: Modificar arquivo</li>\n<li><strong>Write</strong>: Criar novo arquivo</li>\n<li><strong>Bash</strong>: Executar comando</li>\n<li><strong>WebSearch</strong>: Buscar na internet</li>\n<li><strong>MCP Tools</strong>: Ferramentas customizadas</li>\n</ul>\n<p>Exemplo:</p>\n<pre><code>\nClaude quer debugar \u2192 precisa Read (arquivo) \u2192 analisar \u2192 prop\u00f5e Edit\n</code></pre>\n<h3>4. **Itera\u00e7\u00e3o Cont\u00ednua**</h3>\n<pre><code>\nPrompt 1 \u2192 Tool Use \u2192 Resultado 1\n    \u2193\nRefina com feedback \u2192 Prompt 2\n    \u2193\nTool Use \u2192 Resultado 2\n    \u2193\n... (at\u00e9 usu\u00e1rio estar satisfeito)\n</code></pre>\n<p>---</p>\n<h2>Exemplo Passo a Passo</h2>\n<p><strong>Tarefa</strong>: \"Adicione testes para este fun\u00e7\u00e3o\"</p>\n<pre><code>\n1. USU\u00c1RIO DIGITA\n   \"Adicione testes para a fun\u00e7\u00e3o `calcular_juros`\"\n   (+ arquivo aberto: main.py)\n\n2. CLAUDE CODE PROCESSA\n   - Identifica arquivo atual\n   - Carrega main.py\n   - Monta contexto\n\n3. CLAUDE API PENSA\n   - \"Preciso ler a fun\u00e7\u00e3o\"\n   - \u2192 Retorna: \"usar Read tool\"\n\n4. TOOL USE: READ\n   - L\u00ea main.py\n   - Extrai fun\u00e7\u00e3o `calcular_juros`\n   - Retorna conte\u00fado\n\n5. CLAUDE API ANALISA\n   - V\u00ea fun\u00e7\u00e3o (e.g., juro composto)\n   - Pensa em casos de teste\n   - Retorna: \"usar Write tool para tests.py\"\n\n6. TOOL USE: WRITE\n   - Cria tests.py com:\n     - Teste caso normal\n     - Teste juro zero\n     - Teste taxa negativa\n     - etc.\n\n7. RESPOSTA AO USU\u00c1RIO\n   - \"Criei 5 testes para sua fun\u00e7\u00e3o\"\n   - Mostra conte\u00fado de tests.py\n   - Sugere: \"Quer rod\u00e1-los?\"\n\n8. USU\u00c1RIO: \"Sim\"\n   - Claude usa Bash tool\n   - Executa: pytest tests.py\n   - Mostra resultado\n</code></pre>\n<p>---</p>\n<h2>Ciclo de Feedback</h2>\n<pre><code>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502   Usu\u00e1rio v\u00ea sa\u00edda  \u2502\n\u2502   Claude Code       \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n           \u2502\n      \u250c\u2500\u2500\u2500\u2500\u25bc\u2500\u2500\u2500\u2500\u2510\n      \u2502 Feedback?\u2502\n      \u2514\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2518\n        \u2502      \u2502\n      \u274c N\u00e3o   \u2705 Sim\n        \u2502        \u2502\n        \u2502      \u250c\u2500\u25bc\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n        \u2502      \u2502 Refine: \"Mas...\"   \u2502\n        \u2502      \u2502 Novo prompt        \u2502\n        \u2502      \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n        \u2502           \u2502\n        \u2502      Volta para Step 3\n        \u2502           \u2502\n        \u2502      [Nova itera\u00e7\u00e3o]\n        \u2502\n        \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n         Pronto!\n</code></pre>\n<p>---</p>\n<h2>Context Management</h2>\n<p>Claude Code gerencia contexto para:</p>\n<ul>\n<li><strong>Reutilizar</strong> informa\u00e7\u00f5es j\u00e1 fornecidas</li>\n<li><strong>Evitar</strong> repeti\u00e7\u00e3o desnecess\u00e1ria</li>\n<li><strong>Economizar</strong> tokens</li>\n<li><strong>Manter</strong> coer\u00eancia entre respostas</li>\n</ul>\n<pre><code>\nSess\u00e3o 1: Fornecer contexto (custoso em tokens)\nSess\u00e3o 2: Reutilizar + novo contexto (mais barato)\nSess\u00e3o 3+: Manter hist\u00f3rico em CLAUDE.md (persistente)\n</code></pre>\n<p>---</p>\n<h2>Timing e Performance</h2>\n<p>| A\u00e7\u00e3o | Tempo T\u00edpico |</p>\n<p>|---|---|</p>\n<p>| Inicializa\u00e7\u00e3o | <1s |</p>\n<p>| Processamento de prompt (pequeno) | 1-3s |</p>\n<p>| Tool use simples (Read) | <500ms |</p>\n<p>| API call | 5-15s |</p>\n<p>| Tool use complexo (Bash) | 2-10s |</p>\n<p>| Resposta ao usu\u00e1rio | Imediata |</p>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"02-COMO-FUNCIONA-INTERNAMENTE.md\">Como Funciona Internamente</a></p>"}, "2": {"title": "02-COMO-FUNCIONA-INTERNAMENTE", "html": "<h1>Como Claude Code Funciona Internamente</h1>\n<h2>Arquitetura Interna</h2>\n<pre><code>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502            CLAUDE CODE HARNESS (Controle)            \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502                                                      \u2502\n\u2502  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510  \u2502\n\u2502  \u2502  Input Parser (prompt do usu\u00e1rio)            \u2502  \u2502\n\u2502  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518  \u2502\n\u2502                   \u2502                                \u2502\n\u2502  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25bc\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u2502\n\u2502  \u2502  Context Manager                              \u2502 \u2502\n\u2502  \u2502  - Arquivo atual                              \u2502 \u2502\n\u2502  \u2502  - CLAUDE.md                                  \u2502 \u2502\n\u2502  \u2502  - Token counter                              \u2502 \u2502\n\u2502  \u2502  - History                                    \u2502 \u2502\n\u2502  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 \u2502\n\u2502                   \u2502                                \u2502\n\u2502  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25bc\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u2502\n\u2502  \u2502  Claude Model (via API)                       \u2502 \u2502\n\u2502  \u2502  - Recebe contexto + prompt                   \u2502 \u2502\n\u2502  \u2502  - Processa (internamente: LLM)               \u2502 \u2502\n\u2502  \u2502  - Retorna: resposta + tool calls             \u2502 \u2502\n\u2502  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 \u2502\n\u2502                   \u2502                                \u2502\n\u2502  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25bc\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u2502\n\u2502  \u2502  Tool Execution Engine                        \u2502 \u2502\n\u2502  \u2502  - Executa Read, Edit, Write                  \u2502 \u2502\n\u2502  \u2502  - Executa Bash, WebSearch                    \u2502 \u2502\n\u2502  \u2502  - Aplica resultados                          \u2502 \u2502\n\u2502  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 \u2502\n\u2502                   \u2502                                \u2502\n\u2502  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25bc\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u2502\n\u2502  \u2502  Output Formatter (resposta ao usu\u00e1rio)       \u2502 \u2502\n\u2502  \u2502  - Markdown formatting                        \u2502 \u2502\n\u2502  \u2502  - Syntax highlighting                        \u2502 \u2502\n\u2502  \u2502  - Tool results display                       \u2502 \u2502\n\u2502  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 \u2502\n\u2502                                                   \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n</code></pre>\n<p>---</p>\n<h2>Agent Loop (Loop de Agente)</h2>\n<pre><code>\nwhile not done:\n    # 1. Claude pensa: precisa de ferramenta?\n    if model_response.contains_tool_call():\n        # 2. Executa ferramenta\n        tool_result = execute_tool(model_response.tool_call)\n        \n        # 3. Integra resultado\n        context.add(tool_result)\n        \n        # 4. Chama modelo novamente com resultado\n        model_response = call_api(context)\n    else:\n        # 5. Sem mais ferramentas, responde usu\u00e1rio\n        display_response(model_response)\n        done = True\n</code></pre>\n<p>---</p>\n<h2>Exemplo Real: Debugging</h2>\n<p><strong>Entrada</strong>: \"N\u00e3o estou vendo output do print\"</p>\n<pre><code>\n1\ufe0f\u20e3 Claude pensa:\n   \"Preciso ler o arquivo para ver o c\u00f3digo\"\n   \u2192 Tool: Read(app.py)\n\n2\ufe0f\u20e3 Ferramenta executa:\n   Arquivo lido, conte\u00fado retornado\n\n3\ufe0f\u20e3 Claude analisa:\n   \"Vi o problema! Print est\u00e1 fora de escopo\"\n   \u2192 Tool: Edit(mudar indenta\u00e7\u00e3o)\n\n4\ufe0f\u20e3 Ferramenta executa:\n   Arquivo editado\n\n5\ufe0f\u20e3 Claude oferece:\n   \"Para testar, quer que eu rode?\"\n   \u2192 Aguardando feedback usu\u00e1rio\n\n6\ufe0f\u20e3 Usu\u00e1rio: \"Sim\"\n\n7\ufe0f\u20e3 Claude executa:\n   \u2192 Tool: Bash(python app.py)\n\n8\ufe0f\u20e3 Resultado:\n   Output aparece, problema resolvido\n\n9\ufe0f\u20e3 Claude responde:\n   \"Visto! Precisava de indenta\u00e7\u00e3o correta.\"\n</code></pre>\n<p>---</p>\n<h2>Token Management</h2>\n<h3>Como tokens s\u00e3o contados</h3>\n<pre><code>\nEntrada:\n- Seu prompt: N tokens\n- Arquivo carregado: M tokens\n- CLAUDE.md: K tokens\n- Hist\u00f3rico: H tokens\nTotal Input = N + M + K + H\n\nSa\u00edda:\n- Resposta Claude: R tokens\nTotal Output = R\n\nCusto sess\u00e3o = (Input \u00d7 $0.003) + (Output \u00d7 $0.015) / 1000\n</code></pre>\n<h3>Otimiza\u00e7\u00e3o de Tokens</h3>\n<pre><code>\n\u274c Ineficiente\n- Fornecer projeto inteiro\n- Hist\u00f3rico de 50 mensagens\n- C\u00f3digo irrelevante\n\n\u2705 Eficiente\n- Apenas arquivo necess\u00e1rio\n- Hist\u00f3rico essencial\n- Contexto focado em CLAUDE.md\n</code></pre>\n<p>---</p>\n<h2>Context Window (200k tokens)</h2>\n<p>Sonnet 4.6 pode processar at\u00e9 200k tokens de entrada.</p>\n<pre><code>\nExemplo de distribui\u00e7\u00e3o:\n- Seu prompt: 500 tokens (0.25%)\n- Arquivo grande: 50k tokens (25%)\n- CLAUDE.md: 5k tokens (2.5%)\n- Hist\u00f3rico: 10k tokens (5%)\n- Dispon\u00edvel para nova resposta: 134.5k tokens (67.25%)\n</code></pre>\n<p><strong>Quando cabe tudo</strong>: Use tudo!</p>\n<p><strong>Quando n\u00e3o cabe</strong>: Seja seletivo (focar em relevante)</p>\n<p>---</p>\n<h2>Compacta\u00e7\u00e3o de Contexto</h2>\n<p>Claude Code pode \"resumir\" conversas antigas para fazer espa\u00e7o para novas.</p>\n<pre><code>\nConversa\u00e7\u00e3o longa:\nM1 (editor) \u2192 R1 (Claude)\nM2 (usu\u00e1rio refina) \u2192 R2 (Claude)\nM3 (novo bug) \u2192 R3 (Claude)\n... (50 mensagens)\n\nQuando atinge ~80% tokens:\n[Sistema resume conversas antigas]\n\nNovo espa\u00e7o dispon\u00edvel para continuar\n</code></pre>\n<p>---</p>\n<h2>Settings.json e Hooks</h2>\n<h3>settings.json</h3>\n<p>Arquivo de configura\u00e7\u00e3o em `~/.claude/settings.json`:</p>\n<pre><code>\n{\n  \"model\": \"claude-sonnet-4-6\",\n  \"permissions\": {\n    \"bash\": \"allow-read-only\"\n  },\n  \"hooks\": {\n    \"before-response\": \"linter.sh\"\n  }\n}\n</code></pre>\n<h3>Hooks</h3>\n<p>Scripts que executam automaticamente:</p>\n<pre><code>\nbefore-prompt: valida entrada antes de enviar\nbefore-response: processa antes de mostrar ao usu\u00e1rio\nafter-tool: executa ap\u00f3s ferramenta (e.g., auto-format)\n</code></pre>\n<p>---</p>\n<h2>CLAUDE.md (Persist\u00eancia)</h2>\n<p>Arquivo especial que Claude Code l\u00ea automaticamente:</p>\n<pre><code>\n# Projeto: API Django\n\n## Padr\u00f5es\n- Use type hints em tudo\n- Django ORM, nunca SQL raw\n- Testes com pytest\n\n## Decis\u00f5es\n- Python 3.11+\n- PostgreSQL 14+\n\n## Estrutura\n- `api/` - c\u00f3digo principal\n- `tests/` - testes\n</code></pre>\n<p>Claude integra isso automaticamente em cada contexto.</p>\n<p>---</p>\n<h2>Fluxo de Edi\u00e7\u00e3o (Edit Tool)</h2>\n<pre><code>\nUsu\u00e1rio pede mudan\u00e7a:\n\"Adicione import no topo\"\n\nClaude:\n1. L\u00ea arquivo (Read)\n2. Identifica local preciso\n3. Calcula mudan\u00e7a m\u00ednima\n4. Usa Edit tool com:\n   - old_string: texto exato a trocar\n   - new_string: novo texto\n5. Valida mudan\u00e7a\n6. Aplica com sucesso\n</code></pre>\n<p>Edit \u00e9 preciso porque:</p>\n<ul>\n<li>\u2705 Alvo exato (n\u00e3o quebra indenta\u00e7\u00e3o)</li>\n<li>\u2705 R\u00e1pido (n\u00e3o reescreve arquivo inteiro)</li>\n<li>\u2705 Revers\u00edvel (mudan\u00e7a m\u00ednima)</li>\n</ul>\n<p>---</p>\n<h2>MCP Servers</h2>\n<p>Model Context Protocol - extens\u00e3o de ferramentas:</p>\n<pre><code>\nFerramentas padr\u00e3o (built-in):\n- Read, Edit, Write\n- Bash\n- WebSearch, WebFetch\n\nMCP Servers (customiz\u00e1veis):\n- Banco de dados (ex: PostgreSQL query)\n- APIs espec\u00edficas (ex: GitHub API)\n- Ferramentas de neg\u00f3cio (ex: Jira)\n</code></pre>\n<p>Usu\u00e1rio pode adicionar MCP servers em settings.json.</p>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"03-TECNOLOGIAS-SUBJACENTES.md\">Tecnologias Subjacentes</a></p>"}, "3": {"title": "03-TECNOLOGIAS-SUBJACENTES", "html": "<h1>Tecnologias Subjacentes</h1>\n<h2>Modelos Claude Dispon\u00edveis</h2>\n<h3>Sonnet 4.6 (Padr\u00e3o)</h3>\n<ul>\n<li><strong>Velocidade</strong>: R\u00e1pido (~2-3s response)</li>\n<li><strong>Precis\u00e3o</strong>: 90% de Opus, 70% mais r\u00e1pido</li>\n<li><strong>Custo</strong>: M\u00e9dio</li>\n<li><strong>Caso de uso</strong>: Itera\u00e7\u00e3o r\u00e1pida, debugging, refatora\u00e7\u00e3o</li>\n<li><strong>Context window</strong>: 200k tokens</li>\n<li><strong>Token pricing</strong>: $3/$15 por 1M tokens</li>\n</ul>\n<h3>Opus 4.7</h3>\n<ul>\n<li><strong>Velocidade</strong>: Lento (~10-15s response)</li>\n<li><strong>Precis\u00e3o</strong>: Melhor para an\u00e1lise profunda</li>\n<li><strong>Custo</strong>: Mais alto</li>\n<li><strong>Caso de uso</strong>: Arquitetura, an\u00e1lise de seguran\u00e7a, decis\u00f5es cr\u00edticas</li>\n<li><strong>Context window</strong>: 200k tokens</li>\n<li><strong>Token pricing</strong>: $15/$60 por 1M tokens</li>\n</ul>\n<h3>Haiku 4.5</h3>\n<ul>\n<li><strong>Velocidade</strong>: Muito r\u00e1pido (~500ms response)</li>\n<li><strong>Precis\u00e3o</strong>: Adequado para tarefas simples</li>\n<li><strong>Custo</strong>: Mais baixo</li>\n<li><strong>Caso de uso</strong>: Bugfix r\u00e1pido, edi\u00e7\u00e3o simples</li>\n<li><strong>Context window</strong>: 100k tokens</li>\n<li><strong>Token pricing</strong>: $0.80/$4 por 1M tokens</li>\n</ul>\n<p>---</p>\n<h2>API Anthropic</h2>\n<p>Claude Code usa a <strong>Anthropic API</strong> sob o cap\u00f4.</p>\n<h3>Fluxo</h3>\n<pre><code>\nClaude Code (interface)\n    \u2193\nAPI Anthropic (autentica\u00e7\u00e3o + billing)\n    \u2193\nModelo Claude (processamento)\n    \u2193\nResposta (volta pelo mesmo caminho)\n</code></pre>\n<h3>Autentica\u00e7\u00e3o</h3>\n<pre><code>\n# Vari\u00e1vel de ambiente\nexport ANTHROPIC_API_KEY=\"sk-ant-...\"\n\n# Claude Code carrega automaticamente\n# Armazenado em ~/.claude/api_key\n</code></pre>\n<h3>Billing</h3>\n<pre><code>\nCobrado por:\n- Tokens de entrada (mais barato)\n- Tokens de sa\u00edda (mais caro)\n\nN\u00e3o cobrado por:\n- Chamadas falhadas (de sua culpa)\n- Leitura de arquivo local\n- Execu\u00e7\u00e3o de comando bash\n</code></pre>\n<p>---</p>\n<h2>Model Context Protocol (MCP)</h2>\n<p>Protocolo que expande capabilities de Claude Code.</p>\n<h3>Arquitetura MCP</h3>\n<pre><code>\nClaude Code\n    \u2193\nMCP Client (built-in)\n    \u2193\nMCP Server (customizado ou oficial)\n    \u2193\nRecurso externo (DB, API, etc)\n</code></pre>\n<h3>Exemplo: PostgreSQL via MCP</h3>\n<pre><code>\nUsu\u00e1rio: \"Quantos usu\u00e1rios ativos temos?\"\n\nClaude Code:\n1. Reconhece query de BD\n2. Usa MCP PostgreSQL server\n3. Server executa: SELECT COUNT(*) FROM users...\n4. Resultado integrado na resposta\n</code></pre>\n<h3>Servidores MCP Oficiais</h3>\n<ul>\n<li><strong>Filesystem</strong>: acesso a arquivos</li>\n<li><strong>PostgreSQL</strong>: queries de BD</li>\n<li><strong>GitHub</strong>: integra\u00e7\u00e3o com repos</li>\n<li><strong>Google Drive</strong>: acesso a documentos</li>\n</ul>\n<p>---</p>\n<h2>Hook System</h2>\n<p>Sistema de automa\u00e7\u00e3o baseado em eventos.</p>\n<h3>Hooks Dispon\u00edveis</h3>\n<p>| Hook | Quando Dispara | Exemplo |</p>\n<p>|---|---|---|</p>\n<p>| `before-prompt` | Antes de enviar prompt | Valida\u00e7\u00e3o de c\u00f3digo |</p>\n<p>| `before-response` | Antes de mostrar resposta | Formata\u00e7\u00e3o autom\u00e1tica |</p>\n<p>| `after-tool-execution` | Ap\u00f3s ferramenta executar | Auto-commit git |</p>\n<p>| `before-git-push` | Antes de push | Lint checklist |</p>\n<h3>Exemplo Hook: Auto-format antes de resposta</h3>\n<pre><code>\n#!/bin/bash\n# ~/.claude/hooks/before-response.sh\n# Formata Python automaticamente\n\nif [[ \"$FILE\" == *.py ]]; then\n  black \"$FILE\"\n  isort \"$FILE\"\nfi\n</code></pre>\n<p>Configura\u00e7\u00e3o em settings.json:</p>\n<pre><code>\n{\n  \"hooks\": {\n    \"before-response\": \"~/.claude/hooks/before-response.sh\"\n  }\n}\n</code></pre>\n<p>---</p>\n<h2>CLAUDE.md</h2>\n<p>Arquivo especial de configura\u00e7\u00e3o de projeto (n\u00e3o execute, apenas documente).</p>\n<h3>Estrutura Recomendada</h3>\n<pre><code>\n# Projeto: Nome\n\n## Contexto\n- Linguagem: Python\n- Framework: Django 4.2\n- DB: PostgreSQL 14\n\n## Padr\u00f5es\n- Type hints sempre\n- Docstrings em tudo\n- Black + Isort para formata\u00e7\u00e3o\n- Pytest para testes\n\n## Decis\u00f5es Arquiteturais\n- Monol\u00edtico por simplicidade\n- ORM Django (n\u00e3o raw SQL)\n- Cache Redis (n\u00e3o mem\u00f3ria)\n\n## Conven\u00e7\u00f5es\n- Vari\u00e1veis em snake_case\n- Classes em PascalCase\n- Constantes em SCREAMING_SNAKE_CASE\n\n## Restri\u00e7\u00f5es\n- N\u00e3o fazer queryset em loop (N+1 problem)\n- Sempre validar entrada de usu\u00e1rio\n- Testes precisam >80% coverage\n\n## Ferramentas\n- Black: formata\u00e7\u00e3o Python\n- Pytest: testes\n- Ruff: linter\n</code></pre>\n<h3>Por que \u00e9 importante</h3>\n<pre><code>\nSem CLAUDE.md:\nClaude: \"Devo usar Django ORM ou raw SQL?\"\nVoc\u00ea: \"ORM\"\nClaude: \"Ok, mas acho que raw SQL \u00e9 mais claro aqui\"\nVoc\u00ea: \"SEGUE O PADR\u00c3O!\"\n\nCom CLAUDE.md:\nClaude l\u00ea: \"Use Django ORM, nunca raw SQL\"\nClaude: \"Usando ORM como padr\u00e3o do projeto\"\n\u2705 Eficiente, sem discuss\u00e3o\n</code></pre>\n<p>---</p>\n<h2>Token Counting e Pricing</h2>\n<h3>Exemplo Real</h3>\n<p><strong>Opera\u00e7\u00e3o</strong>: Refatorar arquivo com 2k linhas</p>\n<pre><code>\nEntrada:\n- Seu prompt: 100 tokens\n- Arquivo lido: 2,000 tokens\n- CLAUDE.md: 500 tokens\n- Tool result (read): 2,000 tokens\nTotal entrada: ~4,600 tokens\n\nSa\u00edda:\n- Resposta Claude: 300 tokens\n- C\u00f3digo refatorado: 2,100 tokens\nTotal sa\u00edda: ~2,400 tokens\n\nCusto:\n- Entrada: 4,600 \u00d7 $0.003 / 1,000 = $0.0138\n- Sa\u00edda: 2,400 \u00d7 $0.015 / 1,000 = $0.036\n- Total opera\u00e7\u00e3o: $0.05 (aproximado)\n</code></pre>\n<h3>Como Monitorar</h3>\n<pre><code>\n# Ver uso de tokens (em settings.json)\n\"displayTokenUsage\": true\n\n# Claude Code mostra ap\u00f3s cada resposta:\n\"Tokens: 4,600 input | 2,400 output | Total: 7,000\"\n</code></pre>\n<p>---</p>\n<h2>Compacta\u00e7\u00e3o de Prompt (Prompt Caching)</h2>\n<p>Claude usa <strong>cache de prompts</strong> para economizar tokens e tempo.</p>\n<h3>Como funciona</h3>\n<pre><code>\nPrimeira chamada (SEM cache):\n- Arquivo: 10k tokens\n- Prompt: 500 tokens\n- TOTAL: 10,500 tokens \u00d7 $0.003 = $0.0315\n\nChamadas pr\u00f3ximas (COM cache):\n- Arquivo (cacheado): 10k tokens (custo reduzido 90%)\n- Prompt novo: 500 tokens\n- Cache setup: 1,200 tokens (setup adicional)\n- TOTAL: ~3k tokens novos \u00d7 $0.003 = $0.009\n\nEconomia: 65% de tokens se contextoreusar\n</code></pre>\n<h3>Quando cache \u00e9 \u00fatil</h3>\n<pre><code>\n\u2705 \u00datil:\n- Itera\u00e7\u00e3o sobre mesmo arquivo\n- Sess\u00e3o longa com mesmo contexto\n- M\u00faltiplos prompts sobre mesmo documento\n\n\u274c N\u00e3o \u00fatil:\n- Arquivo muda a cada prompt\n- Contexto completamente novo\n- Sess\u00e3o \u00fanica de prompt\n</code></pre>\n<p>---</p>\n<h2>Seguran\u00e7a e Privacidade</h2>\n<h3>Como Claude Code protege dados</h3>\n<p>1. <strong>API Call criptografada</strong> (HTTPS)</p>\n<p>2. <strong>Sem persist\u00eancia de arquivo</strong> (n\u00e3o salvo em cache Anthropic)</p>\n<p>3. <strong>Sem an\u00e1lise de dados</strong> (Anthropic n\u00e3o treina em seus dados)</p>\n<p>4. <strong>Controle local</strong> (settings.json define o que compartilhar)</p>\n<h3>O que Claude Code pode acessar</h3>\n<pre><code>\nV\u00ea:\n- Arquivo aberto no editor\n- Arquivo que voc\u00ea fornecer\n- Output de comandos que voc\u00ea rodou\n\nN\u00e3o v\u00ea:\n- Outros arquivos do projeto (a menos que voc\u00ea forne\u00e7a)\n- Vari\u00e1veis de ambiente (a menos que output mostre)\n- Senhas em .env (a menos que voc\u00ea paste)\n\nNunca compartilha com Anthropic:\n- Seu c\u00f3digo em cache permanente\n- Hist\u00f3rico de sess\u00e3o anterior\n</code></pre>\n<p>---</p>\n<p><strong>Voltar</strong>: <a href=\"01-FLUXO-COMPLETO.md\">Arquitetura</a></p>"}, "4": {"title": "04-HANDS-ON", "html": "<h1>Laborat\u00f3rio Pr\u00e1tico \u2014 Arquitetura do Claude Code</h1>\n<p>Bem-vindo ao laborat\u00f3rio de arquitetura! Este guia oferece exerc\u00edcios concretos para refor\u00e7ar os conceitos internos de como Claude Code funciona. Voc\u00ea ir\u00e1 <strong>observar o fluxo completo</strong>, entender o agent loop em a\u00e7\u00e3o, gerenciar tokens, e explorar as tecnologias subjacentes (modelos, hooks, CLAUDE.md avan\u00e7ado).</p>\n<h2>Pr\u00e9-requisitos</h2>\n<ul>\n<li>\u2705 Claude Code instalado e funcional (teste com `claude --version`)</li>\n<li>\u2705 Estar no diret\u00f3rio raiz do reposit\u00f3rio (`cd ~/Documentos/Projetos/claude-code-learning`)</li>\n<li>\u2705 ~48 minutos para a trilha completa, ou ~15 minutos para a trilha iniciante</li>\n</ul>\n<p>---</p>\n<h2>Sum\u00e1rio de Exerc\u00edcios</h2>\n<p>| # | Conceito | Exerc\u00edcio | Dificuldade | Tempo |</p>\n<p>|---|---|---|---|---|</p>\n<p>| 1.1 | 01-FLUXO-COMPLETO | Observar o Fluxo em Tempo Real | F\u00e1cil | 3 min |</p>\n<p>| 1.2 | 01-FLUXO-COMPLETO | Rastrear as Fases de Inicializa\u00e7\u00e3o | M\u00e9dio | 5 min |</p>\n<p>| 1.3 | 01-FLUXO-COMPLETO | Analisar o Ciclo de Feedback | Dif\u00edcil | 6 min |</p>\n<p>| 2.1 | 02-COMO-FUNCIONA-INTERNAMENTE | Visualizar o Agent Loop | F\u00e1cil | 4 min |</p>\n<p>| 2.2 | 02-COMO-FUNCIONA-INTERNAMENTE | Inspecionar o Uso de Tokens | M\u00e9dio | 5 min |</p>\n<p>| 2.3 | 02-COMO-FUNCIONA-INTERNAMENTE | Testar a Compacta\u00e7\u00e3o de Contexto | Dif\u00edcil | 8 min |</p>\n<p>| 3.1 | 03-TECNOLOGIAS-SUBJACENTES | Comparar Modelos na Pr\u00e1tica | F\u00e1cil | 4 min |</p>\n<p>| 3.2 | 03-TECNOLOGIAS-SUBJACENTES | Criar e Ativar um Hook | M\u00e9dio | 6 min |</p>\n<p>| 3.3 | 03-TECNOLOGIAS-SUBJACENTES | Estruturar um CLAUDE.md Avan\u00e7ado | Dif\u00edcil | 7 min |</p>\n<p>---</p>\n<h2>Trilhas de Aprendizado</h2>\n<h3>\ud83d\ude80 Trilha Iniciante (~15 min)</h3>\n<p>Para quem quer uma vis\u00e3o geral pr\u00e1tica dos internals sem aprofundamento:</p>\n<ul>\n<li><strong>1.1</strong> \u2192 Observar o Fluxo em Tempo Real</li>\n<li><strong>2.1</strong> \u2192 Visualizar o Agent Loop</li>\n<li><strong>3.1</strong> \u2192 Comparar Modelos na Pr\u00e1tica</li>\n</ul>\n<p><strong>Objetivo</strong>: Sentir o funcionamento interno do Claude Code sem mergulhar em detalhes t\u00e9cnicos.</p>\n<h3>\ud83d\udcda Trilha Completa (~48 min)</h3>\n<p>Para aprendizado total: execute todos os 9 exerc\u00edcios em sequ\u00eancia (1.1 \u2192 1.2 \u2192 1.3 \u2192 2.1 \u2192 ... \u2192 3.3).</p>\n<p><strong>Objetivo</strong>: Dominar a arquitetura interna, gerenciamento de contexto e tecnologias subjacentes.</p>\n<p>---</p>\n<h2>Exerc\u00edcios</h2>\n<h3>1.1 \u2014 Observar o Fluxo em Tempo Real</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `01-FLUXO-COMPLETO.md`  </p>\n<p><strong>Conceito</strong>: O fluxo completo de uma intera\u00e7\u00e3o passa por fases distintas (Inicializa\u00e7\u00e3o \u2192 Processamento \u2192 Tool Use Loop \u2192 Resposta).  </p>\n<p><strong>Dificuldade</strong>: F\u00e1cil | <strong>Tempo</strong>: ~3 min</p>\n<p>Voc\u00ea vai executar um comando simples e observar as fases do fluxo acontecendo em tempo real.</p>\n<p>#### Setup</p>\n<p>Voc\u00ea est\u00e1 no diret\u00f3rio raiz do reposit\u00f3rio. Nenhum arquivo precisa ser criado.</p>\n<p>#### Comando</p>\n<pre><code>\nclaude \"Liste os nomes dos 3 primeiros arquivos do diret\u00f3rio 02-ARQUITETURA/\"\n</code></pre>\n<p>#### Sa\u00edda Esperada</p>\n<p>Voc\u00ea ver\u00e1:</p>\n<pre><code>\nReading 02-ARQUITETURA/...\n[Claude lista os arquivos ou avisa que precisa usar Bash]\n</code></pre>\n<p>Se Claude usar `Bash` para listar os arquivos:</p>\n<pre><code>\nExecutando: find 02-ARQUITETURA/ -maxdepth 1 -type f -name \"*.md\" | head -3\n\n01-FLUXO-COMPLETO.md\n02-COMO-FUNCIONA-INTERNAMENTE.md\n03-TECNOLOGIAS-SUBJACENTES.md\n</code></pre>\n<p><strong>O que observar</strong>: Voc\u00ea viu pelo menos 2 fases em a\u00e7\u00e3o:</p>\n<p>1. <strong>Inicializa\u00e7\u00e3o</strong>: Claude carregou o contexto (arquivo, CLAUDE.md, hist\u00f3rico)</p>\n<p>2. <strong>Tool Use Loop</strong>: Claude executou uma ferramenta (Read ou Bash) para responder</p>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>Este \u00e9 o fluxo b\u00e1sico descrito em `01-FLUXO-COMPLETO.md`:</p>\n<pre><code>\nSeu Prompt \u2192 Claude Agente \u2192 [Decide usar ferramenta] \u2192 Tool Use (Read/Bash) \u2192 Resultado \u2192 Resposta\n</code></pre>\n<p>A lat\u00eancia que voc\u00ea observou (segundos entre o prompt e a resposta) inclui:</p>\n<ul>\n<li>Carregamento de contexto (<1s)</li>\n<li>Chamada \u00e0 API Claude (5-15s)</li>\n<li>Execu\u00e7\u00e3o da ferramenta (<1s)</li>\n</ul>\n<p>---</p>\n<h3>1.2 \u2014 Rastrear as Fases de Inicializa\u00e7\u00e3o</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `01-FLUXO-COMPLETO.md` (Fase 1: Inicializa\u00e7\u00e3o)  </p>\n<p><strong>Conceito</strong>: Na fase de Inicializa\u00e7\u00e3o, Claude Code carrega o arquivo atual, CLAUDE.md, hist\u00f3rico e modelo.  </p>\n<p><strong>Dificuldade</strong>: M\u00e9dio | <strong>Tempo</strong>: ~5 min</p>\n<p>Voc\u00ea vai criar um CLAUDE.md m\u00ednimo e observar como Claude o carrega automaticamente.</p>\n<p>#### Setup</p>\n<p>Crie um arquivo `CLAUDE_test.md` no diret\u00f3rio raiz com este conte\u00fado:</p>\n<pre><code>\ncat > CLAUDE_test.md << 'EOF'\n# Projeto de Teste\n\nStack: Python 3.12, FastAPI\nPadr\u00e3o: snake_case em nomes de fun\u00e7\u00e3o\nRestri\u00e7\u00e3o: Todas as fun\u00e7\u00f5es devem ter type hints\n\n## Decis\u00f5es Arquiteturais\n- Usar async/await por padr\u00e3o\n- Validar input em handlers HTTP\nEOF\n</code></pre>\n<p>(Usamos `CLAUDE_test.md` para n\u00e3o sobrescrever o CLAUDE.md real do reposit\u00f3rio.)</p>\n<p>#### Comando \u2014 Sess\u00e3o 1</p>\n<p>Rode um prompt que dependa do contexto do arquivo de teste:</p>\n<pre><code>\nclaude \"Leia o arquivo CLAUDE_test.md. Baseado nas conven\u00e7\u00f5es ali definidas, crie uma fun\u00e7\u00e3o para buscar um usu\u00e1rio do banco de dados.\"\n</code></pre>\n<p><strong>Sa\u00edda esperada</strong>: Claude l\u00ea o arquivo automaticamente e gera uma fun\u00e7\u00e3o com type hints, snake_case e async/await:</p>\n<pre><code>\nasync def obter_usuario(usuario_id: int) -> dict[str, Any]:\n    \"\"\"Busca um usu\u00e1rio do banco de dados.\"\"\"\n    usuario = await db.fetch(\"SELECT * FROM usuarios WHERE id = ?\", usuario_id)\n    return usuario\n</code></pre>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>Observe que na <strong>Fase 1 (Inicializa\u00e7\u00e3o)</strong>:</p>\n<ul>\n<li>Claude leu `CLAUDE_test.md` automaticamente</li>\n<li>Voc\u00ea <strong>nunca pediu explicitamente</strong> para \"ler o arquivo\"</li>\n<li>Claude extraiu as restri\u00e7\u00f5es (type hints, async/await) e as aplicou</li>\n</ul>\n<p>Este \u00e9 o poder da Inicializa\u00e7\u00e3o: contexto persiste e \u00e9 reutilizado sem repeti\u00e7\u00e3o manual.</p>\n<p>---</p>\n<h3>1.3 \u2014 Analisar o Ciclo de Feedback</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `01-FLUXO-COMPLETO.md` (Ciclo de Feedback)  </p>\n<p><strong>Conceito</strong>: O Ciclo de Feedback permite itera\u00e7\u00e3o: o usu\u00e1rio refina com novos prompts, contexto acumula, respostas melhoram.  </p>\n<p><strong>Dificuldade</strong>: Dif\u00edcil | <strong>Tempo</strong>: ~6 min</p>\n<p>Voc\u00ea vai fazer 3 prompts encadeados para observar como o contexto se acumula e refina.</p>\n<p>#### Sequ\u00eancia de 3 Prompts (mesma sess\u00e3o)</p>\n<p><strong>Prompt 1</strong>:</p>\n<pre><code>\nclaude \"Descreva brevemente o que \u00e9 o Agent Loop segundo 02-COMO-FUNCIONA-INTERNAMENTE.md\"\n</code></pre>\n<p><strong>Sa\u00edda esperada</strong>: Claude descreve o loop while-not-done que executa ferramentas iterativamente.</p>\n<p><strong>Prompt 2</strong> (sem repetir contexto):</p>\n<pre><code>\n\"Agora d\u00ea um exemplo de c\u00f3digo Python que simule este loop com 3 itera\u00e7\u00f5es.\"\n</code></pre>\n<p><strong>Sa\u00edda esperada</strong>: Claude gera pseudoc\u00f3digo do loop, baseado no conceito anterior (contexto acumulou).</p>\n<p><strong>Prompt 3</strong> (refinamento):</p>\n<pre><code>\n\"Adicione coment\u00e1rios explicando cada etapa do loop e identifique onde ocorre a 'parada' (termination condition).\"\n</code></pre>\n<p><strong>Sa\u00edda esperada</strong>: Claude refina o c\u00f3digo anterior adicionando coment\u00e1rios, sem voc\u00ea precisar repetir o contexto.</p>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>| Aspecto | Resultado |</p>\n<p>|---|---|</p>\n<p>| <strong>Prompt 1</strong> | Claude entendeu o conceito isolado |</p>\n<p>| <strong>Prompt 2</strong> | Claude reutilizou a resposta anterior (contexto acumulou) |</p>\n<p>| <strong>Prompt 3</strong> | Claude refinou a resposta, mantendo coes\u00e3o |</p>\n<p>O <strong>Ciclo de Feedback</strong> \u00e9 a ferramenta principal para itera\u00e7\u00e3o. Voc\u00ea n\u00e3o precisa \"reiniciar\" o contexto \u2014 ele cresce com cada prompt.</p>\n<p>---</p>\n<h3>2.1 \u2014 Visualizar o Agent Loop</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `02-COMO-FUNCIONA-INTERNAMENTE.md` (Agent Loop)  </p>\n<p><strong>Conceito</strong>: O Agent Loop \u00e9 o while-not-done que executa ferramentas repetidamente at\u00e9 n\u00e3o haver mais tool calls.  </p>\n<p><strong>Dificuldade</strong>: F\u00e1cil | <strong>Tempo</strong>: ~4 min</p>\n<p>Voc\u00ea vai for\u00e7ar m\u00faltiplas tool calls em sequ\u00eancia para observar o loop em a\u00e7\u00e3o.</p>\n<p>#### Setup</p>\n<p>Crie um arquivo `arquitetura_test.py` no diret\u00f3rio raiz:</p>\n<pre><code>\ncat > arquitetura_test.py << 'EOF'\ndef saudacao(nome):\n    return f\"Ola {nome}\"\n\ndef calcular_dobro(numero):\n    return numero * 2\nEOF\n</code></pre>\n<p>#### Comando</p>\n<pre><code>\nclaude \"Leia o arquivo arquitetura_test.py e me diga: (1) quantas fun\u00e7\u00f5es tem, (2) o que cada uma faz, (3) execute uma chamada de teste de cada fun\u00e7\u00e3o em Python.\"\n</code></pre>\n<p>#### Sa\u00edda Esperada</p>\n<p>Claude vai:</p>\n<pre><code>\nLendo arquitetura_test.py...\n\n[An\u00e1lise do arquivo]\n\n[Resultado da an\u00e1lise: 2 fun\u00e7\u00f5es]\n\n[Execu\u00e7\u00e3o de testes]\n</code></pre>\n<p>Voc\u00ea ver\u00e1 mensagens como:</p>\n<ul>\n<li>`Reading arquitetura_test.py` (Tool: Read)</li>\n<li>`Executando: python -c \"...\"` (Tool: Bash)</li>\n</ul>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>O Agent Loop em a\u00e7\u00e3o:</p>\n<pre><code>\nItera\u00e7\u00e3o 1: Read arquivo \u2192 resultado integrado\nItera\u00e7\u00e3o 2: Bash executa teste \u2192 resultado integrado\nItera\u00e7\u00e3o 3: Claude sintetiza resposta final\nwhile not done\n</code></pre>\n<p>Cada itera\u00e7\u00e3o do loop recebe o resultado da anterior e o integra ao contexto automaticamente.</p>\n<p>---</p>\n<h3>2.2 \u2014 Inspecionar o Uso de Tokens</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `02-COMO-FUNCIONA-INTERNAMENTE.md` (Token Management)  </p>\n<p><strong>Conceito</strong>: Cada intera\u00e7\u00e3o consome tokens; \u00e9 importante monitorar a distribui\u00e7\u00e3o (prompt / arquivo / hist\u00f3rico).  </p>\n<p><strong>Dificuldade</strong>: M\u00e9dio | <strong>Tempo</strong>: ~5 min</p>\n<p>Voc\u00ea vai ativar o monitoramento de tokens e observar a distribui\u00e7\u00e3o.</p>\n<p>#### Setup</p>\n<p>Ative a exibi\u00e7\u00e3o de tokens na configura\u00e7\u00e3o:</p>\n<pre><code>\nclaude \"/config\"\n</code></pre>\n<p>Procure por `displayTokenUsage` e defina como `true`. (Se n\u00e3o encontrar, tudo bem \u2014 continue com o exerc\u00edcio.)</p>\n<p>#### Comando</p>\n<pre><code>\nclaude \"Analise todo o arquivo 02-COMO-FUNCIONA-INTERNAMENTE.md e responda: qual \u00e9 a f\u00f3rmula de custo apresentada e qual \u00e9 o exemplo real de refatora\u00e7\u00e3o com seu custo estimado?\"\n</code></pre>\n<p>#### Sa\u00edda Esperada</p>\n<p>Se o `displayTokenUsage` estiver ativado, voc\u00ea ver\u00e1 algo como:</p>\n<pre><code>\nAnalisando 02-COMO-FUNCIONA-INTERNAMENTE.md...\n\n[Resposta]\n\n--- Token Usage ---\nInput tokens: 4500\nOutput tokens: 1200\nTotal: 5700 tokens\nCusto estimado: (~$0.017)\n</code></pre>\n<p>Decomposi\u00e7\u00e3o esperada de input tokens:</p>\n<ul>\n<li>~200 tokens: seu prompt</li>\n<li>~2500 tokens: conte\u00fado do arquivo</li>\n<li>~1800 tokens: hist\u00f3rico/contexto</li>\n</ul>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>Cada componente do contexto consome tokens:</p>\n<p>| Componente | Propor\u00e7\u00e3o T\u00edpica |</p>\n<p>|---|---|</p>\n<p>| Seu prompt | 5-10% |</p>\n<p>| Arquivo(s) | 40-60% |</p>\n<p>| CLAUDE.md | 2-5% |</p>\n<p>| Hist\u00f3rico | 10-30% |</p>\n<p>| Dispon\u00edvel (buffer) | ~10% |</p>\n<p>Monitorar tokens ajuda a otimizar prompts e evitar truncagem em sess\u00f5es longas.</p>\n<p>---</p>\n<h3>2.3 \u2014 Testar a Compacta\u00e7\u00e3o de Contexto</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `02-COMO-FUNCIONA-INTERNAMENTE.md` (Compacta\u00e7\u00e3o de Contexto)  </p>\n<p><strong>Conceito</strong>: Quando o contexto atinge ~80% dos tokens, o sistema resume conversas antigas para liberar espa\u00e7o.  </p>\n<p><strong>Dificuldade</strong>: Dif\u00edcil | <strong>Tempo</strong>: ~8 min</p>\n<p>Voc\u00ea vai fazer uma sess\u00e3o longa com ~10 prompts para pressionar o context window e observar a compacta\u00e7\u00e3o.</p>\n<p>#### Setup</p>\n<p>Abra um editor ou terminal para monitorar. Voc\u00ea vai fazer 10 prompts curtos em sequ\u00eancia.</p>\n<p>#### Sequ\u00eancia de Prompts</p>\n<p>Execute cada um ap\u00f3s o outro <strong>na mesma sess\u00e3o</strong> (n\u00e3o feche Claude entre eles):</p>\n<p>1. `\"O que \u00e9 o context window em Claude Code?\"`</p>\n<p>2. `\"Qual \u00e9 o tamanho do context window do Sonnet 4.6?\"`</p>\n<p>3. `\"Quais s\u00e3o os 3 principais componentes que consomem tokens?\"`</p>\n<p>4. `\"Como a compacta\u00e7\u00e3o de contexto funciona quando se atinge 80%?\"`</p>\n<p>5. `\"Que tipos de resumos o sistema faz durante compacta\u00e7\u00e3o?\"`</p>\n<p>6. `\"Qual \u00e9 a diferen\u00e7a entre compacta\u00e7\u00e3o autom\u00e1tica e manual?\"`</p>\n<p>7. `\"D\u00ea um exemplo de como uma conversa longa \u00e9 resumida.\"`</p>\n<p>8. `\"Qual \u00e9 o impacto da compacta\u00e7\u00e3o na qualidade da resposta?\"`</p>\n<p>9. `\"Como posso evitar atingir o limite de contexto em sess\u00f5es longas?\"`</p>\n<p>10. `\"Resuma tudo que discutimos sobre contexto nesta sess\u00e3o.\"`</p>\n<p>#### Sa\u00edda Esperada (Prompts 1-5)</p>\n<p>Claude responde normalmente com lat\u00eancia de 5-15s por prompt.</p>\n<p>#### Sa\u00edda Esperada (Prompts 6-10)</p>\n<p>Se o contexto come\u00e7ar a ficar cheio, voc\u00ea pode observar:</p>\n<ul>\n<li>Mensagens expl\u00edcitas como `[Context compacted to save space]` (alguns ambientes mostram)</li>\n<li>Respostas mais curtas (Claude resumiu para economizar espa\u00e7o)</li>\n<li>Poss\u00edvel lat\u00eancia ligeiramente maior (processamento do resumo)</li>\n</ul>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>A <strong>Compacta\u00e7\u00e3o de Contexto</strong> \u00e9 autom\u00e1tica:</p>\n<pre><code>\nTokens usados < 80% do limite\n  \u2193 (continue normalmente)\nTokens usados \u2265 80% do limite\n  \u2193 (acionar compacta\u00e7\u00e3o)\nSistema resume conversas antigas\n  \u2193\nLibera ~20-30% de espa\u00e7o\n  \u2193\nContinua aceitando novos prompts\n</code></pre>\n<p>Voc\u00ea vivenciou isto: sess\u00e3o longa com 10 prompts funciona porque o sistema compacta automaticamente.</p>\n<p>---</p>\n<h3>3.1 \u2014 Comparar Modelos na Pr\u00e1tica</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `03-TECNOLOGIAS-SUBJACENTES.md` (Modelos Dispon\u00edveis)  </p>\n<p><strong>Conceito</strong>: Diferentes modelos t\u00eam tradeoffs: Haiku \u00e9 r\u00e1pido/barato, Sonnet \u00e9 equilibrado, Opus \u00e9 potente/caro.  </p>\n<p><strong>Dificuldade</strong>: F\u00e1cil | <strong>Tempo</strong>: ~4 min</p>\n<p>Voc\u00ea vai executar o mesmo prompt com 2 modelos diferentes e comparar.</p>\n<p>#### Comando 1 \u2014 Haiku (r\u00e1pido)</p>\n<pre><code>\nclaude --model claude-haiku-4-5 \"Explique em 3 linhas o que \u00e9 o Agent Loop em Claude Code.\"\n</code></pre>\n<p><strong>Tempo observado</strong>: ~1-2 segundos  </p>\n<p><strong>Sa\u00edda esperada</strong>: Explica\u00e7\u00e3o concisa de 3 linhas.</p>\n<p>#### Comando 2 \u2014 Opus (potente)</p>\n<pre><code>\nclaude --model claude-opus-4-7 \"Explique em 3 linhas o que \u00e9 o Agent Loop em Claude Code.\"\n</code></pre>\n<p><strong>Tempo observado</strong>: ~10-15 segundos  </p>\n<p><strong>Sa\u00edda esperada</strong>: Explica\u00e7\u00e3o mais detalhada e elaborada.</p>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>Compara\u00e7\u00e3o pr\u00e1tica:</p>\n<p>| Aspecto | Haiku 4.5 | Opus 4.7 |</p>\n<p>|---|---|---|</p>\n<p>| <strong>Velocidade</strong> | ~500ms | ~10-15s |</p>\n<p>| <strong>Profundidade</strong> | Superficial | Profundo |</p>\n<p>| <strong>Custo estimado</strong> | $0.80 por 1M | $15 por 1M |</p>\n<p>| <strong>Melhor para</strong> | Bugfix r\u00e1pido | An\u00e1lise pesada |</p>\n<p><strong>Regra pr\u00e1tica</strong>: Use Haiku para itera\u00e7\u00e3o r\u00e1pida, Opus para decis\u00f5es cr\u00edticas.</p>\n<p>---</p>\n<h3>3.2 \u2014 Criar e Ativar um Hook</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `03-TECNOLOGIAS-SUBJACENTES.md` (Hook System)  </p>\n<p><strong>Conceito</strong>: Hooks s\u00e3o scripts que executam antes/depois de eventos (prompts, tools, respostas).  </p>\n<p><strong>Dificuldade</strong>: M\u00e9dio | <strong>Tempo</strong>: ~6 min</p>\n<p>Voc\u00ea vai criar um hook simples que imprime um s\u00edmbolo ap\u00f3s cada execu\u00e7\u00e3o de ferramenta.</p>\n<p>#### Setup</p>\n<p>Crie um script de hook:</p>\n<pre><code>\nmkdir -p ~/.claude/hooks\ncat > ~/.claude/hooks/after-tool.sh << 'EOF'\n#!/bin/bash\necho \"\u2713 Ferramenta executada\"\nEOF\nchmod +x ~/.claude/hooks/after-tool.sh\n</code></pre>\n<p>Agora registre o hook no `~/.claude/settings.json` ou `~/.claude/settings.local.json`:</p>\n<p>Procure pela se\u00e7\u00e3o `hooks` e adicione (ou crie se n\u00e3o existir):</p>\n<pre><code>\n{\n  \"hooks\": {\n    \"after-tool-execution\": \"~/.claude/hooks/after-tool.sh\"\n  }\n}\n</code></pre>\n<p>#### Comando</p>\n<pre><code>\nclaude \"Leia o arquivo README.md deste reposit\u00f3rio e conte quantos arquivos .md tem na raiz.\"\n</code></pre>\n<p>#### Sa\u00edda Esperada</p>\n<p>Voc\u00ea ver\u00e1:</p>\n<pre><code>\nReading README.md...\n\u2713 Ferramenta executada\n\n[Claude fornece o resultado]\n</code></pre>\n<p>O s\u00edmbolo `\u2713` aparece ap\u00f3s Claude executar o tool `Read`, confirmando que o hook foi acionado.</p>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>Hooks permitem automa\u00e7\u00e3o:</p>\n<pre><code>\nTool executada \u2192 Hook `after-tool-execution` dispara \u2192 Script roda \u2192 Log, valida\u00e7\u00e3o, etc.\n</code></pre>\n<p>Casos de uso comuns:</p>\n<ul>\n<li>Auto-commit git ap\u00f3s edi\u00e7\u00f5es</li>\n<li>Linting ap\u00f3s mudan\u00e7as de c\u00f3digo</li>\n<li>Logging de opera\u00e7\u00f5es cr\u00edticas</li>\n</ul>\n<p>---</p>\n<h3>3.3 \u2014 Estruturar um CLAUDE.md Avan\u00e7ado</h3>\n<p><strong>Arquivo de Refer\u00eancia</strong>: `03-TECNOLOGIAS-SUBJACENTES.md` (CLAUDE.md Avan\u00e7ado)  </p>\n<p><strong>Conceito</strong>: Um CLAUDE.md bem estruturado com 6 se\u00e7\u00f5es define o contexto completo do projeto.  </p>\n<p><strong>Dificuldade</strong>: Dif\u00edcil | <strong>Tempo</strong>: ~7 min</p>\n<p>Voc\u00ea vai criar um CLAUDE.md completo seguindo o padr\u00e3o recomendado.</p>\n<p>#### Setup</p>\n<p>Crie um arquivo `CLAUDE_advanced.md` (n\u00e3o sobrescrevemos o real):</p>\n<pre><code>\ncat > CLAUDE_advanced.md << 'EOF'\n# CLAUDE.md \u2014 Projeto de Exemplo\n\n## 1. Contexto\n\nProjeto educacional em Python 3.12 que ensina arquitetura de sistemas.\nFramework: FastAPI para API REST\nDatabase: PostgreSQL 15\nObjetivo: Demonstrar padr\u00f5es de arquitetura limpa\n\n## 2. Padr\u00f5es\n\n- **Linguagem**: Portuguese para documenta\u00e7\u00e3o, English para c\u00f3digo\n- **Type hints**: Obrigat\u00f3rios em todos os par\u00e2metros e retornos\n- **Docstrings**: Google-style com Args, Returns, Raises\n- **Nomenclatura**: snake_case para vari\u00e1veis/fun\u00e7\u00f5es, PascalCase para classes\n- **Async**: async/await por padr\u00e3o em handlers HTTP\n\n## 3. Decis\u00f5es Arquiteturais\n\n- Usar camadas: rotas \u2192 servi\u00e7os \u2192 reposit\u00f3rio \u2192 banco\n- Valida\u00e7\u00e3o de entrada em handlers HTTP (not in services)\n- Logging centralizado com structlog\n- Tratamento de erros com exce\u00e7\u00f5es customizadas\n\n## 4. Conven\u00e7\u00f5es\n\n- Arquivos de testes nomeados `test_*.py`\n- Imports organizados: stdlib, 3rd-party, local\n- M\u00e1ximo 100 caracteres por linha\n- Blank line ap\u00f3s imports, entre functions\n\n## 5. Restri\u00e7\u00f5es\n\n- Sem N+1 queries (sempre usar joins ou bulk operations)\n- Cobertura de testes > 80%\n- Valida\u00e7\u00e3o de entrada em todos os endpoints\n- Nunca expor erros internos ao cliente\n\n## 6. Ferramentas\n\n- Testing: pytest + pytest-cov\n- Linting: ruff, mypy\n- Formatting: black\n- CI: GitHub Actions\nEOF\n</code></pre>\n<p>#### Comando</p>\n<pre><code>\nclaude \"Leia o arquivo CLAUDE_advanced.md e crie uma fun\u00e7\u00e3o async para obter um usu\u00e1rio por ID que siga TODAS as conven\u00e7\u00f5es e restri\u00e7\u00f5es definidas.\"\n</code></pre>\n<p>#### Sa\u00edda Esperada</p>\n<p>Claude gera uma fun\u00e7\u00e3o que respeita <strong>todas as 6 se\u00e7\u00f5es</strong> do CLAUDE.md:</p>\n<pre><code>\nasync def obter_usuario_por_id(usuario_id: int) -> dict[str, Any]:\n    \"\"\"Obt\u00e9m um usu\u00e1rio do banco de dados por ID.\n    \n    Args:\n        usuario_id: ID \u00fanico do usu\u00e1rio.\n    \n    Returns:\n        Dicion\u00e1rio com dados do usu\u00e1rio.\n    \n    Raises:\n        UsuarioNaoEncontrado: Se o usu\u00e1rio n\u00e3o existir.\n    \"\"\"\n    usuario = await db.fetch(\n        \"SELECT id, nome, email FROM usuarios WHERE id = ?\", usuario_id\n    )\n    if not usuario:\n        raise UsuarioNaoEncontrado(f\"Usu\u00e1rio {usuario_id} n\u00e3o encontrado\")\n    return usuario\n</code></pre>\n<p><strong>Observe</strong>:</p>\n<ul>\n<li>Type hints (`async`, `int`, `dict[str, Any]`)</li>\n<li>Docstring Google-style</li>\n<li>snake_case `obter_usuario_por_id`</li>\n<li>Valida\u00e7\u00e3o e erro customizado</li>\n<li>Coment\u00e1rio m\u00ednimo (apenas quando necess\u00e1rio explicar WHY)</li>\n</ul>\n<p>#### Conceito Refor\u00e7ado</p>\n<p>Um CLAUDE.md bem estruturado transforma a qualidade do c\u00f3digo:</p>\n<p>| Sem CLAUDE.md | Com CLAUDE.md |</p>\n<p>|---|---|</p>\n<p>| Inconsist\u00eancia entre respostas | Consist\u00eancia garantida |</p>\n<p>| Sem padr\u00f5es claros | Padr\u00f5es impl\u00edcitos em todo c\u00f3digo |</p>\n<p>| Repeti\u00e7\u00e3o de contexto em cada prompt | Contexto carregado uma vez |</p>\n<p>| Qualidade depende do prompt | Qualidade \u00e9 basal (mesmo em prompts curtos) |</p>\n<p>---</p>\n<h2>Checklist de Conclus\u00e3o</h2>\n<p>Depois de executar os exerc\u00edcios, marque os itens abaixo para confirmar que voc\u00ea dominou cada conceito:</p>\n<ul>\n<li>[ ] <strong>1.1</strong>: Observei o fluxo completo (Inicializa\u00e7\u00e3o \u2192 Tool Use \u2192 Resposta)</li>\n<li>[ ] <strong>1.2</strong>: Entendi que CLAUDE.md \u00e9 carregado automaticamente na Inicializa\u00e7\u00e3o</li>\n<li>[ ] <strong>1.3</strong>: Vivenciei o Ciclo de Feedback com 3 prompts encadeados</li>\n<li>[ ] <strong>2.1</strong>: Vi o Agent Loop executar m\u00faltiplas tool calls em sequ\u00eancia</li>\n<li>[ ] <strong>2.2</strong>: Inspecionei a distribui\u00e7\u00e3o de tokens (prompt / arquivo / hist\u00f3rico)</li>\n<li>[ ] <strong>2.3</strong>: Pressionar o context window e observar a compacta\u00e7\u00e3o autom\u00e1tica</li>\n<li>[ ] <strong>3.1</strong>: Comparei Haiku (r\u00e1pido) vs Opus (potente) na pr\u00e1tica</li>\n<li>[ ] <strong>3.2</strong>: Criei e ativei um hook em `~/.claude/settings.json`</li>\n<li>[ ] <strong>3.3</strong>: Estruturei um CLAUDE.md com todas as 6 se\u00e7\u00f5es</li>\n</ul>\n<p>---</p>\n<h2>Pr\u00f3ximos Passos</h2>\n<p>Parab\u00e9ns! Voc\u00ea completou o <strong>Laborat\u00f3rio Pr\u00e1tico de Arquitetura</strong>. Agora est\u00e1 pronto para aprender t\u00e9cnicas avan\u00e7adas de prompting:</p>\n<ul>\n<li><strong>Pr\u00f3ximo m\u00f3dulo</strong>: Leia <a href=\"../03-COMANDOS-SINTAXE/01-PROMPT-BASICO.md\">`03-COMANDOS-SINTAXE/01-PROMPT-BASICO.md`</a> para aprender sintaxe e padr\u00f5es de prompts efetivos</li>\n<li><strong>Padr\u00f5es de uso</strong>: Depois explore <a href=\"../04-PADROES-USO/01-ITERACAO-RAPIDA.md\">`04-PADROES-USO/01-ITERACAO-RAPIDA.md`</a> para t\u00e9cnicas de itera\u00e7\u00e3o avan\u00e7adas</li>\n<li><strong>Aprofundamento</strong>: Se quiser entender melhor token management e compacta\u00e7\u00e3o, releia <a href=\"./02-COMO-FUNCIONA-INTERNAMENTE.md\">`02-COMO-FUNCIONA-INTERNAMENTE.md`</a></li>\n</ul>\n<p>---</p>\n<p><strong>Criado em</strong>: 2026-05-23  </p>\n<p><strong>Tempo total de pr\u00e1tica</strong>: ~48 minutos (trilha completa) ou ~15 minutos (trilha iniciante)</p>"}, "5": {"title": "diagrama-fluxo.png", "html": "<h1>Diagrama de Fluxo Completo</h1>\n<h2>\ud83d\udccb Nota</h2>\n<p>Este arquivo \u00e9 um <strong>placeholder</strong> para um diagrama visual do fluxo completo de Claude Code.</p>\n<h3>Para adicionar diagrama:</h3>\n<p>Voc\u00ea pode criar um diagrama em um dos seguintes formatos:</p>\n<p>1. <strong>SVG</strong> (recomendado para reposit\u00f3rios)</p>\n<p>   - Texto puro, version\u00e1vel no git</p>\n<p>   - Renomear arquivo para `diagrama-fluxo.svg`</p>\n<p>   - Pode ser editado com Inkscape ou editor de texto</p>\n<p>2. <strong>PNG</strong> (mais visual)</p>\n<p>   - Usar ferramentas como:</p>\n<p>     - Mermaid (mermaid-js.github.io)</p>\n<p>     - Draw.io (draw.io)</p>\n<p>     - Lucidchart</p>\n<p>3. <strong>ASCII Art</strong> (j\u00e1 inclu\u00eddo)</p>\n<p>   - Ver arquivo `01-FLUXO-COMPLETO.md` para diagrama ASCII completo</p>\n<h3>Sugest\u00e3o de Conte\u00fado</h3>\n<p>O diagrama deve mostrar:</p>\n<pre><code>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502  Usu\u00e1rio Digita \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n         \u2502\n         \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Claude Code Processa \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n         \u2502\n         \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 API Anthropic          \u2502\n\u2502 (Claude Model)         \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n         \u2502\n    \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2510\n    \u2502 Tool?   \u2502\n    \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n    \u2502 Sim \u2502N\u00e3o\u2502\n    \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u252c\u2500\u2518\n    \u2502  \u2502\n    \u25bc  \u25bc\nTool   Resposta\nUse    Usu\u00e1rio\n</code></pre>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"03-TECNOLOGIAS-SUBJACENTES.md\">Tecnologias Subjacentes</a></p>"}};
         let current = parseInt(new URLSearchParams(window.location.search).get('topic') || '1');
         const total = 5;
+        const currentModule = '02';
+
+        const allModules = {
+            '01': ['Conceitos Fundamentais', 5],
+            '02': ['Arquitetura', 5],
+            '03': ['Comandos & Sintaxe', 5],
+            '04': ['Padrões de Uso', 5],
+            '05': ['Casos Reais', 4],
+            '06': ['Troubleshooting', 4],
+        };
+
+        const moduleFiles = {
+            '01': '01-conceitos-fundamentais',
+            '02': '02-arquitetura',
+            '03': '03-comandos--sintaxe',
+            '04': '04-padrões-de-uso',
+            '05': '05-casos-reais',
+            '06': '06-troubleshooting',
+        };
+
+        function buildSidebar() {
+            Object.entries(allModules).forEach(([modNum, [modName, topicCount]]) => {
+                const container = document.getElementById(`module-${modNum}`);
+                for (let i = 1; i <= topicCount; i++) {
+                    const link = document.createElement('a');
+                    link.href = `${moduleFiles[modNum]}.html?topic=${i}`;
+                    link.textContent = `Tópico ${i}`;
+                    if (modNum === currentModule && i === current) {
+                        link.classList.add('active');
+                    }
+                    container.appendChild(document.createElement('li')).appendChild(link);
+                }
+            });
+        }
 
         function render(n) {
             if (!topics[n]) return;
@@ -136,17 +377,37 @@
             document.getElementById('next-btn').href = current < total ? `?topic=${current + 1}` : '#';
             document.getElementById('next-btn').classList.toggle('disabled', current === total);
             window.history.replaceState({}, '', `?topic=${current}`);
+
+            // Update active link in sidebar
+            document.querySelectorAll('.sidebar-links a').forEach(a => {
+                a.classList.remove('active');
+            });
+            const currentLink = document.querySelector(`.sidebar-links a[href="${moduleFiles[currentModule]}.html?topic=${current}"]`);
+            if (currentLink) currentLink.classList.add('active');
         }
 
         document.getElementById('prev-btn').addEventListener('click', (e) => {
             if (current > 1) { current--; render(current); }
             e.preventDefault();
         });
+
         document.getElementById('next-btn').addEventListener('click', (e) => {
             if (current < total) { current++; render(current); }
             e.preventDefault();
         });
 
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        // Close sidebar on link click (mobile)
+        document.querySelectorAll('.sidebar-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('open');
+            });
+        });
+
+        buildSidebar();
         render(current);
     </script>
 </body>

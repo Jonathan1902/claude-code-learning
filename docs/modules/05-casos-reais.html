@@ -11,8 +11,139 @@
             line-height: 1.7;
             color: #333;
             background: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-header {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            background: #f7fafc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-section-title .emoji {
+            font-size: 1.1em;
+        }
+
+        .sidebar-links {
+            list-style: none;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 6px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            padding: 8px 12px;
+            color: #4a5568;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-links a:hover {
+            background: #edf2f7;
+            color: #2d3748;
+            border-left-color: #3182ce;
+            padding-left: 15px;
+        }
+
+        .sidebar-links a.active {
+            background: #3182ce;
+            color: white;
+            font-weight: 500;
+            border-left-color: #2c5aa0;
+        }
+
+        .sidebar-home {
+            padding: 12px;
+            margin-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .sidebar-home a {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: #3182ce;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .sidebar-home a:hover {
+            background: #2c5aa0;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        main {
+            margin-left: 280px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
         header {
             background: white;
             padding: 30px;
@@ -62,7 +193,7 @@
             flex-wrap: wrap;
             margin-top: 40px;
         }
-        .nav a, .nav button {
+        .nav a {
             padding: 12px 24px;
             border-radius: 6px;
             border: none;
@@ -79,7 +210,7 @@
             background: #2c5aa0;
             transform: translateY(-2px);
         }
-        .nav a.disabled, .nav button:disabled {
+        .nav a.disabled {
             background: #cbd5e0;
             cursor: not-allowed;
             transform: none;
@@ -92,41 +223,151 @@
         }
         footer { text-align: center; padding: 20px; color: #666; font-size: 0.9em; }
         footer a { color: #3182ce; text-decoration: none; }
+
         @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            .sidebar.open {
+                max-height: 500px;
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+            main {
+                margin-left: 0;
+            }
             .container { padding: 20px; }
             .nav { flex-direction: column; }
+            header h1 { font-size: 1.5em; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="../index.html">← Home</a> &gt; <strong>Casos Reais</strong>
+    <button class="sidebar-toggle" id="sidebar-toggle">☰ Menu</button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">Navegação</div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">📚</span> Conceitos
+            </div>
+            <ul class="sidebar-links" id="module-01"></ul>
         </div>
 
-        <header>
-            <h1>🔧 Casos Reais</h1>
-        </header>
-
-        <div class="content" id="content">
-            <p>Carregando...</p>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">⚙️</span> Arquitetura
+            </div>
+            <ul class="sidebar-links" id="module-02"></ul>
         </div>
 
-        <div class="nav">
-            <a href="#" id="prev-btn" class="disabled">← Anterior</a>
-            <a href="../index.html" class="home-link">↑ Menu Principal</a>
-            <a href="#" id="next-btn">Próximo →</a>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">💬</span> Comandos
+            </div>
+            <ul class="sidebar-links" id="module-03"></ul>
         </div>
 
-        <footer>
-            <p>Claude Code Learning Repository</p>
-        </footer>
-    </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🎯</span> Padrões
+            </div>
+            <ul class="sidebar-links" id="module-04"></ul>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🔧</span> Casos Reais
+            </div>
+            <ul class="sidebar-links" id="module-05"></ul>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">
+                <span class="emoji">🐛</span> Troubleshooting
+            </div>
+            <ul class="sidebar-links" id="module-06"></ul>
+        </div>
+
+        <div class="sidebar-home">
+            <a href="../index.html">← Voltar ao Menu</a>
+        </div>
+    </aside>
+
+    <main>
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="../index.html">← Home</a> &gt; <strong>Casos Reais</strong>
+            </div>
+
+            <header>
+                <h1>🔧 Casos Reais</h1>
+            </header>
+
+            <div class="content" id="content">
+                <p>Carregando...</p>
+            </div>
+
+            <div class="nav">
+                <a href="#" id="prev-btn" class="disabled">← Anterior</a>
+                <a href="../index.html" class="home-link">↑ Menu Principal</a>
+                <a href="#" id="next-btn">Próximo →</a>
+            </div>
+
+            <footer>
+                <p>Claude Code Learning Repository</p>
+            </footer>
+        </div>
+    </main>
 
     <script>
         const topics = {"1": {"title": "01-PROCESSAMENTO-DADOS", "html": "<h1>Processamento de Dados com Claude Code</h1>\n<h2>Caso 1: ETL de CSV para JSON</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Arquivo CSV com 1M linhas. Precisa transformar em JSON, validar dados.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Python 3.11, pandas para processing\n\nTarefa: Ler CSV grande, validar, exportar JSON\n\nArquivo: customers.csv (1M linhas)\nColunas: id, name, email, created_at\n\nValida\u00e7\u00e3o:\n- Email deve ser v\u00e1lido\n- created_at formato ISO\n- Remover duplicatas de email\n\nExportar: clientes_validos.json\n\nPerformance: deve rodar em <30 segundos\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude cria script que:</p>\n<p>1. L\u00ea CSV em chunks (memory efficient)</p>\n<p>2. Valida com regex/validators</p>\n<p>3. Remove duplicatas (set de emails)</p>\n<p>4. Escreve JSON</p>\n<p>5. Log de erros rejeitados</p>\n<p>---</p>\n<h2>Caso 2: Parse de Log Estruturado</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Log de aplica\u00e7\u00e3o com milh\u00f5es de linhas. Precisa extrair padr\u00f5es.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Python, an\u00e1lise de logs de produ\u00e7\u00e3o\n\nTarefa: Parse de app.log e gerar relat\u00f3rio\n\nLog format:\n2026-05-23 10:30:15 [ERROR] User registration failed: email_exists\n\nPreciso:\n- Contar erros por tipo\n- Extrair timings (lat\u00eancia de requisi\u00e7\u00f5es)\n- Identificar padr\u00f5es de falha\n\nOutput: JSON com estat\u00edsticas\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude cria parser que:</p>\n<p>1. Regex para extrair campos</p>\n<p>2. Agrupa por tipo de erro</p>\n<p>3. Calcula m\u00e9dias/percentis</p>\n<p>4. Gera JSON estruturado</p>\n<p>---</p>\n<h2>Caso 3: Transforma\u00e7\u00e3o de Schema</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>BD antiga em MySQL, migrar para PostgreSQL.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: MySQL \u2192 PostgreSQL migration\n\nTarefa: Exportar dados, adaptar para novo schema\n\nSchema Antigo:\n- users (id, name, email)\n- posts (id, user_id, content)\n\nSchema Novo:\n- users (id, email, full_name, created_at)\n- articles (id, author_id, title, body, published_at)\n\nRequisitos:\n- Mapear user_id \u2192 author_id\n- Dividir 'content' em title + body\n- Gerar created_at com timestamp atual\n- Validar refer\u00eancias integridade\n\nOutput: SQL INSERT statements para PostgreSQL\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude cria migration que:</p>\n<p>1. Exporta dados do MySQL</p>\n<p>2. Mapeia schemas</p>\n<p>3. Valida FK constraints</p>\n<p>4. Gera INSERT statement para PG</p>\n<p>---</p>\n<h2>Caso 4: Limpeza de Dados</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Dataset com muitos missing values, outliers.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Python, an\u00e1lise de sales_data.csv\n\nTarefa: Limpar dados para ML training\n\nProblemas:\n- Colunas price t\u00eam valores negativos\n- Date column tem \"NULL\" como string\n- Nome tem espa\u00e7os extras\n- 5% dos dados faltam valores\n\nEstrat\u00e9gia:\n- Remover pre\u00e7o <0 (provavelmente erros)\n- Converter date corretamente\n- Trim whitespace em strings\n- Imputar valores faltantes (m\u00e9dia para num\u00e9ricos)\n\nOutput: dataset_clean.csv\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude cria script que:</p>\n<p>1. Detecta tipo de coluna</p>\n<p>2. Aplica transforma\u00e7\u00f5es apropriadas</p>\n<p>3. Imputa\u00e7\u00e3o autom\u00e1tica</p>\n<p>4. Relat\u00f3rio de limpeza (quantas linhas removidas)</p>\n<p>---</p>\n<h2>Caso 5: Agrega\u00e7\u00e3o e Resumo</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Tabela de transa\u00e7\u00f5es, precisa gerar relat\u00f3rio executivo.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: PostgreSQL, dados de transa\u00e7\u00f5es\n\nTarefa: Gerar relat\u00f3rio de vendas por per\u00edodo\n\nDados:\n- transactions (id, date, amount, category, customer_id)\n- 10M linhas\n\nGerar JSON:\n{\n  \"total_revenue\": 1000000,\n  \"by_category\": { \"A\": 500000, \"B\": 300000 },\n  \"by_month\": { \"2026-01\": 100000, \"2026-02\": 150000 },\n  \"top_10_customers\": [...]\n}\n\nPerformance: <5 segundos\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude cria query + Python que:</p>\n<p>1. Agrupa por categoria</p>\n<p>2. Agrupa por per\u00edodo</p>\n<p>3. Ranks de clientes</p>\n<p>4. Retorna JSON estruturado</p>\n<p>---</p>\n<h2>Exemplo Pr\u00e1tico: Caso Completo</h2>\n<h3>Problema</h3>\n<p>Temos CSV com vendas, precisa gerar KPI dashboard.</p>\n<h3>Prompt Detalhado</h3>\n<pre><code>\nContexto:\n- Python 3.11\n- Arquivo: sales_2026.csv (500k linhas)\n- Colunas: date, product_id, quantity, unit_price, region\n\nTarefa: Gerar KPI para dashboard\n\nKPIs esperados:\n1. Total revenue (sum de quantidade \u00d7 pre\u00e7o)\n2. Vendas por regi\u00e3o (breakdown)\n3. Top 10 produtos\n4. Trend mensal (revenue crescendo ou reduzindo?)\n5. Ticket m\u00e9dio (revenue / n\u00famero de transa\u00e7\u00f5es)\n\nOutput Format:\n</code></pre>\n<p>{</p>\n<p>  \"total_revenue\": 1000000,</p>\n<p>  \"metrics\": {</p>\n<p>    \"by_region\": { \"North\": ..., \"South\": ... },</p>\n<p>    \"top_products\": [...],</p>\n<p>    \"monthly_trend\": [...],</p>\n<p>    \"avg_ticket\": 150.50</p>\n<p>  }</p>\n<p>}</p>\n<pre><code>\n\nRequisitos:\n- Use pandas (performance)\n- Type hints completos\n- Docstring explicando cada KPI\n- Trate valores inv\u00e1lidos\n- Valida\u00e7\u00e3o: total_revenue = sum(quantidade \u00d7 pre\u00e7o)\n\nVoc\u00ea fornece:\n- Amostra de dados (primeiras 10 linhas)\n</code></pre>\n<h3>Resultado do Claude</h3>\n<pre><code>\nimport pandas as pd\nfrom typing import dict\n\ndef calculate_kpis(csv_file: str) -> dict:\n    \"\"\"Calculates KPI metrics from sales data\"\"\"\n    \n    # L\u00ea em chunks para memoria eficiente\n    df = pd.read_csv(csv_file)\n    \n    # Valida\u00e7\u00e3o\n    assert df['unit_price'].min() >= 0\n    \n    # Calcula revenue\n    df['revenue'] = df['quantity'] * df['unit_price']\n    \n    total_revenue = df['revenue'].sum()\n    \n    # Agrega\u00e7\u00f5es\n    by_region = df.groupby('region')['revenue'].sum().to_dict()\n    top_products = df.groupby('product_id')['revenue'].sum().nlargest(10)\n    \n    # Trend\n    df['date'] = pd.to_datetime(df['date'])\n    monthly_trend = df.groupby(df['date'].dt.to_period('M'))['revenue'].sum()\n    \n    # Ticket m\u00e9dio\n    avg_ticket = total_revenue / len(df)\n    \n    return {\n        \"total_revenue\": float(total_revenue),\n        \"metrics\": {\n            \"by_region\": by_region,\n            \"top_products\": top_products.to_dict(),\n            \"monthly_trend\": monthly_trend.to_dict(),\n            \"avg_ticket\": float(avg_ticket)\n        }\n    }\n</code></pre>\n<p>---</p>\n<h2>Padr\u00f5es Comuns em Processamento</h2>\n<h3>Chunk Processing (Arquivos Grandes)</h3>\n<pre><code>\nfor chunk in pd.read_csv('huge.csv', chunksize=10000):\n    # Processa 10k linhas por vez (memory efficient)\n    process(chunk)\n</code></pre>\n<h3>Valida\u00e7\u00e3o em Pipe</h3>\n<pre><code>\ndf = (\n    pd.read_csv('data.csv')\n    .loc[df['value'] > 0]  # Filtra\n    .drop_duplicates()     # Remove duplicatas\n    .fillna(df.mean())     # Imputa\n)\n</code></pre>\n<h3>Erro Tracking</h3>\n<pre><code>\nerrors = []\nfor row in data:\n    try:\n        process(row)\n    except Exception as e:\n        errors.append({\n            'row': row,\n            'error': str(e)\n        })\n\n# Relat\u00f3rio de erros\nprint(f\"Processados: {len(data) - len(errors)}\")\nprint(f\"Erros: {len(errors)}\")\n</code></pre>\n<p>---</p>\n<h2>Benchmarks T\u00edpicos</h2>\n<p>| Opera\u00e7\u00e3o | Tamanho | Tempo |</p>\n<p>|---|---|---|</p>\n<p>| Ler CSV | 1M linhas | 5-10s |</p>\n<p>| Validar email | 100k linhas | 2-3s |</p>\n<p>| Dedupe | 1M linhas | 3-5s |</p>\n<p>| Agrega\u00e7\u00e3o | 10M linhas | 5-10s |</p>\n<p>| ML training | 100k features | 30-60s |</p>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"02-GERACAO-CODIGO.md\">Gera\u00e7\u00e3o de C\u00f3digo</a></p>"}, "2": {"title": "02-GERACAO-CODIGO", "html": "<h1>Gera\u00e7\u00e3o de C\u00f3digo com Claude Code</h1>\n<h2>Caso 1: REST API Completa</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Precisa de API CRUD para entidade de BD.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: FastAPI, PostgreSQL, Python 3.11\n\nTarefa: Criar API CRUD completa para Produto\n\nRequisitos:\n- GET /products (listar paginado)\n- GET /products/{id} (detalhe)\n- POST /products (criar)\n- PUT /products/{id} (atualizar)\n- DELETE /products/{id} (remover)\n\nSchema Produto:\n- id (UUID)\n- name (string)\n- price (decimal)\n- stock (int)\n- created_at (datetime)\n\nImplementar:\n- Pydantic models (request/response)\n- SQLAlchemy ORM models\n- Error handling (404, 422, etc)\n- Type hints completos\n- Docstrings\n\nEstrutura:\n- models.py (DB schema)\n- schemas.py (Pydantic)\n- main.py (endpoints)\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude gera:</p>\n<p>1. SQLAlchemy Product model</p>\n<p>2. Pydantic ProductCreate, ProductResponse</p>\n<p>3. Todos os 5 endpoints</p>\n<p>4. Valida\u00e7\u00f5es apropriadas</p>\n<p>5. Error handling</p>\n<p>---</p>\n<h2>Caso 2: Testes Automatizados</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Fun\u00e7\u00e3o complexa sem testes. Gerar suite completa.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Pytest, Django, >80% coverage\n\nFun\u00e7\u00e3o para testar:\ndef calculate_discount(price: float, user_type: str, quantity: int) -> float:\n    [c\u00f3digo complexo com m\u00faltiplas condi\u00e7\u00f5es]\n\nCasos de teste:\n1. Normal user, 1 item \u2192 0% discount\n2. Premium user, 1 item \u2192 10% discount\n3. Bulk (10+ items) \u2192 5% discount\n4. Premium + Bulk \u2192 15% discount\n5. Negative price \u2192 ValueError\n6. Invalid user_type \u2192 ValueError\n\nGerar test_discount.py com:\n- Fixtures necess\u00e1rias\n- Parametrized tests\n- Edge cases\n- Assertions claras\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude gera:</p>\n<pre><code>\nimport pytest\nfrom discount import calculate_discount\n\n@pytest.mark.parametrize(\"price,user_type,qty,expected\", [\n    (100, \"normal\", 1, 100),\n    (100, \"premium\", 1, 90),\n    (100, \"normal\", 10, 95),\n    (100, \"premium\", 10, 85),\n])\ndef test_calculate_discount(price, user_type, qty, expected):\n    assert calculate_discount(price, user_type, qty) == expected\n\ndef test_invalid_price():\n    with pytest.raises(ValueError):\n        calculate_discount(-100, \"normal\", 1)\n\ndef test_invalid_user_type():\n    with pytest.raises(ValueError):\n        calculate_discount(100, \"invalid\", 1)\n</code></pre>\n<p>---</p>\n<h2>Caso 3: Deploy Script Automatizado</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Deploy manual \u00e9 propenso a erro. Gerar script robusto.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Python/Django app, PostgreSQL, Nginx reverse proxy\n\nTarefa: Deploy script que:\n1. Faz backup do banco\n2. Puxa latest git\n3. Instala depend\u00eancias\n4. Roda migrations\n5. Coleta static files\n6. Restarts gunicorn\n7. Testa health check\n8. Rollback se falhar\n\nRequisitos:\n- Logging em arquivo\n- Email alert se falhar\n- Dry-run mode\n- Rollback autom\u00e1tico\n- Testar depois que app est\u00e1 up\n\nArgumentos:\ndeploy.py --env production --no-backup (skip backup)\ndeploy.py --rollback (volta para anterior)\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude gera script que:</p>\n<p>1. Valida\u00e7\u00f5es pr\u00e9-deploy</p>\n<p>2. Backup com timestamp</p>\n<p>3. Execu\u00e7\u00e3o passo-a-passo</p>\n<p>4. Logging detalhado</p>\n<p>5. Health check</p>\n<p>6. Rollback em caso de erro</p>\n<p>---</p>\n<h2>Caso 4: CLI Tool</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Precisa de ferramenta de linha de comando para tarefas repetitivas.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Python Click library, PostgreSQL\n\nCLI Tool: user-manager\n\nComandos:\n1. user create --email X --name Y\n2. user list [--status active|inactive]\n3. user reset-password --email X\n4. user delete --email X [--confirm]\n5. user import --file users.csv\n6. user export --format json|csv\n\nRequisitos:\n- Valida\u00e7\u00e3o de input\n- Confirma\u00e7\u00e3o para opera\u00e7\u00f5es destruidoras\n- Feedback claro (sucesso/erro)\n- Progress bar para bulk ops\n- Connection pool para DB\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude gera CLI tool com:</p>\n<p>1. Click app structure</p>\n<p>2. Subcomandos para cada opera\u00e7\u00e3o</p>\n<p>3. Valida\u00e7\u00f5es apropriadas</p>\n<p>4. Confirma\u00e7\u00e3o interativa</p>\n<p>5. Pretty-print output</p>\n<p>6. Error handling robusto</p>\n<p>---</p>\n<h2>Caso 5: Micro-frontend Component</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Precisa de React component reutiliz\u00e1vel.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: React 18, TypeScript, TailwindCSS\n\nComponente: Modal Dialog\n\nProps:\n- isOpen: boolean\n- title: string\n- content: ReactNode\n- onClose: () => void\n- onConfirm: () => void\n- confirmLabel?: string (default: \"Confirmar\")\n- cancelLabel?: string (default: \"Cancelar\")\n\nRequisitos:\n- Acessibilidade (keyboard escape close)\n- Animation smooth (fade in/out)\n- Backdrop click fecha\n- Focus trap dentro modal\n- TypeScript types\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude gera:</p>\n<pre><code>\ninterface ModalProps {\n  isOpen: boolean;\n  title: string;\n  content: React.ReactNode;\n  onClose: () => void;\n  onConfirm: () => void;\n  confirmLabel?: string;\n  cancelLabel?: string;\n}\n\nexport function Modal({ isOpen, title, ... }: ModalProps) {\n  // Implementa\u00e7\u00e3o com acessibilidade, anima\u00e7\u00f5es, etc\n}\n</code></pre>\n<p>---</p>\n<h2>Padr\u00e3o: Gera\u00e7\u00e3o com TDD</h2>\n<h3>1. Teste Primeiro</h3>\n<pre><code>\nClaude: \"Qual \u00e9 seu c\u00f3digo de teste?\"\nVoc\u00ea: [fornece test_feature.py]\n</code></pre>\n<h3>2. Claude Implementa</h3>\n<pre><code>\nClaude v\u00ea que testes precisam de Feature class\ne gera implementa\u00e7\u00e3o que passa nos testes\n</code></pre>\n<h3>3. Valida Cobertura</h3>\n<pre><code>\nClaude roda pytest --cov\nGarante >80% coverage\n</code></pre>\n<p>---</p>\n<h2>Benchmarks</h2>\n<p>| Tipo | Tempo |</p>\n<p>|---|---|</p>\n<p>| API CRUD 5 endpoints | 1-2 min |</p>\n<p>| Test suite 10 casos | 2-3 min |</p>\n<p>| Deploy script robusto | 5-10 min |</p>\n<p>| CLI tool 5 comandos | 5-10 min |</p>\n<p>| React component avan\u00e7ado | 3-5 min |</p>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"03-ANALISE-PERFORMANCE.md\">An\u00e1lise de Performance</a></p>"}, "3": {"title": "03-ANALISE-PERFORMANCE", "html": "<h1>An\u00e1lise de Performance</h1>\n<h2>Caso 1: Profiling de Python</h2>\n<h3>Problema</h3>\n<p>Script de processamento de dados roda em 5 minutos. Target: 1 minuto.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Python 3.11, pandas, processing dataset 100MB\n\nScript atual demora 5 minutos.\nTarget: <1 minuto (5x mais r\u00e1pido)\n\nC\u00f3digo:\n[fornecer script completo]\n\nPor favor:\n1. Identifique fun\u00e7\u00f5es lentas (profile)\n2. Explique porqu\u00ea (complexidade, I/O, etc)\n3. Sugira otimiza\u00e7\u00f5es (espec\u00edficas)\n4. Estime speedup esperado\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude:</p>\n<p>1. Identifica loops aninhados (O(n\u00b2))</p>\n<p>2. V\u00ea queries redundantes em loop</p>\n<p>3. Sugere:</p>\n<p>   - \u00cdndices para lookup</p>\n<p>   - Vetoriza\u00e7\u00e3o com numpy</p>\n<p>   - Caching de resultados</p>\n<p>4. Estima 5-10x mais r\u00e1pido</p>\n<p>---</p>\n<h2>Caso 2: Query SQL Lenta</h2>\n<h3>Problema</h3>\n<p>Endpoint de dashboard timeout (>5s).</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Django ORM, PostgreSQL 14, 100k+ usu\u00e1rios\n\nEndpoint tarda >5s (timeout=5s, \u00e9 limite)\n\nQuery atual (ORM):\n[fornecer views.py]\n\nSQL gerado (se souber):\n[fornecer EXPLAIN output]\n\nPor favor:\n1. Que \u00edndices faltam?\n2. H\u00e1 N+1 problem?\n3. Pode ser denormalizado?\n4. H\u00e1 cache estrat\u00e9gico?\n\nTarget: <500ms\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude sugere:</p>\n<p>1. \u00cdndices compostos necess\u00e1rios</p>\n<p>2. select_related() / prefetch_related()</p>\n<p>3. Caching com Redis</p>\n<p>4. Query desnormalizada (se relevante)</p>\n<p>---</p>\n<h2>Caso 3: Memory Leak</h2>\n<h3>Problema</h3>\n<p>Aplica\u00e7\u00e3o crescendo em mem\u00f3ria continuamente.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Python Flask app, running 24/7\n\nObserva\u00e7\u00e3o:\n- Inicia: 100MB\n- Depois 1h: 200MB\n- Depois 2h: 300MB\n- Stays at\u00e9 restart\n\nSuspeita: Memory leak em handler de requisi\u00e7\u00e3o\n\nC\u00f3digo relevante:\n[fornecer views/handlers]\n\nComo debugar:\n1. Qual ferramenta usar?\n2. Como identificar leak?\n3. Como corrigir?\n\nN\u00e3o finalizando objetos? Ciclos refer\u00eancia?\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude sugere:</p>\n<p>1. Usar `memory_profiler` ou `tracemalloc`</p>\n<p>2. Identifica objetos n\u00e3o coletados</p>\n<p>3. Prop\u00f5e fixes (finalizers, circular refs)</p>\n<p>---</p>\n<h2>Caso 4: Database Performance</h2>\n<h3>Problema</h3>\n<p>Dashboard query de analytics roda em 30s.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: 50M transaction records, PostgreSQL\n\nQuery atual demora 30s (deve ser <5s)\n\nQuery:\n[SQL ou ORM]\n\n\u00cdndices atuais:\n- PK em id\n- FK em user_id\n- Nenhum outro\n\nPreciso de:\n1. Que \u00edndices criar?\n2. Qual ser\u00e1 ganho estimado?\n3. H\u00e1 agrega\u00e7\u00e3o que possa ser pr\u00e9-computada?\n4. Particionamento ajudaria?\n\nDados hist\u00f3ricos (2+ anos) que crescem 1M/dia\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude sugere:</p>\n<p>1. \u00cdndices compostos: (user_id, date, amount)</p>\n<p>2. Pr\u00e9-agrega\u00e7\u00e3o (table `daily_summary`)</p>\n<p>3. Particionamento por data (ranges)</p>\n<p>4. Estima: 30s \u2192 100-200ms</p>\n<p>---</p>\n<h2>Caso 5: Frontend Performance</h2>\n<h3>Problema</h3>\n<p>Website carrega lentamente (>3s).</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: React 18, TypeScript\n\nPerformance:\n- Lighthouse: 45/100\n- Time to interactive: 4s\n- Large JS bundle (2MB)\n\nComponentes:\n[listar principais]\n\nPor favor:\n1. Identifique overhead\n2. Code splitting estrat\u00e9gia\n3. Lazy loading recomendado\n4. Bundle otimiza\u00e7\u00e3o\n\nEstou usando:\n- Too many dependencies?\n- Renders desnecess\u00e1rios?\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude sugere:</p>\n<p>1. Code splitting por rota</p>\n<p>2. Lazy load heavy components</p>\n<p>3. Tree-shake unused code</p>\n<p>4. Imagem optimization</p>\n<p>5. Estima: 4s \u2192 1.2s</p>\n<p>---</p>\n<h2>Metodologia: Performance Audit Completo</h2>\n<h3>Step 1: Baseline</h3>\n<pre><code>\nMedir:\n- Tempo atual (10s)\n- M\u00e9trica (requisi\u00e7\u00f5es/segundo)\n- P95 lat\u00eancia\n- CPU/Mem\u00f3ria usage\n</code></pre>\n<h3>Step 2: Profile</h3>\n<pre><code>\nCom ferramentas:\n- Python: cProfile, memory_profiler\n- JS: Chrome DevTools, Lighthouse\n- DB: EXPLAIN, pg_stat_statements\n- Sys: perf, htop\n</code></pre>\n<h3>Step 3: An\u00e1lise</h3>\n<pre><code>\nClaude analisa output do profile:\n- Qual fun\u00e7\u00e3o usa 50%+ tempo?\n- H\u00e1 padr\u00e3o (I/O, CPU, memory)?\n- Isto \u00e9 otimiz\u00e1vel?\n</code></pre>\n<h3>Step 4: Otimiza\u00e7\u00f5es</h3>\n<pre><code>\nPrioridade:\n1. 80/20 (maiores ganhos)\n2. Risco/reward (r\u00e1pido de implementar)\n3. Documentado (claro why)\n</code></pre>\n<h3>Step 5: Valida\u00e7\u00e3o</h3>\n<pre><code>\nMedir novamente:\n- Nova baseline\n- Comparar com target\n- Aceit\u00e1vel?\n</code></pre>\n<p>---</p>\n<h2>Exemplo Real: 10x Mais R\u00e1pido</h2>\n<h3>Antes</h3>\n<pre><code>\ndef process_users():\n    for user in User.objects.all():  # N queries\n        orders = user.orders.all()   # N queries (N+1)\n        for order in orders:\n            items = order.items.all()  # N*M queries\n            total = sum(item.price for item in items)\n            order.total = total\n            order.save()  # N*M saves\n</code></pre>\n<p>Tempo: ~30 segundos para 1k usu\u00e1rios</p>\n<h3>Depois</h3>\n<pre><code>\ndef process_users():\n    # 1 query s\u00f3\n    orders = Order.objects.select_related(\n        'user'\n    ).prefetch_related(\n        'items'\n    ).all()\n    \n    # Em mem\u00f3ria\n    for order in orders:\n        total = sum(item.price for item in order.items.all())\n        order.total = total\n    \n    # 1 bulk update\n    Order.objects.bulk_update(orders, ['total'], batch_size=1000)\n</code></pre>\n<p>Tempo: ~2 segundos (15x mais r\u00e1pido)</p>\n<p>---</p>\n<h2>Ferramentas por Linguagem</h2>\n<p>| Linguagem | Tool | O que mede |</p>\n<p>|---|---|---|</p>\n<p>| Python | cProfile | CPU time por fun\u00e7\u00e3o |</p>\n<p>| Python | memory_profiler | Memory linha por linha |</p>\n<p>| JavaScript | Chrome DevTools | CPU, memory, rendering |</p>\n<p>| JavaScript | Lighthouse | Web vitals |</p>\n<p>| PostgreSQL | EXPLAIN ANALYZE | Query execution plan |</p>\n<p>| PostgreSQL | pg_stat_statements | Queries mais caras |</p>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"04-DOCUMENTACAO.md\">Documenta\u00e7\u00e3o</a></p>"}, "4": {"title": "04-DOCUMENTACAO", "html": "<h1>Gera\u00e7\u00e3o de Documenta\u00e7\u00e3o</h1>\n<h2>Caso 1: Docstrings Autom\u00e1ticas</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>C\u00f3digo Python sem documenta\u00e7\u00e3o.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Django project, type hints presentes\n\nAdicione docstrings Google-style a este arquivo:\n\n[fornecer arquivo inteiro]\n\nRequisitos:\n- Docstring para cada classe, fun\u00e7\u00e3o, m\u00e9todo\n- Format: Google (### Args, Returns, Raises)\n- Exemplo de uso onde apropriado\n- Mencione raises/exceptions\n- N\u00e3o documente \u00f3bvio (type hints j\u00e1 dizem)\n</code></pre>\n<h3>Resultado</h3>\n<pre><code>\ndef calculate_discount(price: float, quantity: int) -> float:\n    \"\"\"Calculate discount based on quantity threshold.\n    \n    Args:\n        price: Base price per item (must be positive)\n        quantity: Number of items (must be >= 1)\n    \n    Returns:\n        Discounted total price\n    \n    Raises:\n        ValueError: If price < 0 or quantity < 1\n    \n    Example:\n        >>> calculate_discount(100, 5)\n        450.0\n    \"\"\"\n</code></pre>\n<p>---</p>\n<h2>Caso 2: README Completo</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Novo projeto sem documenta\u00e7\u00e3o inicial.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Django REST API project\n\nCrie README.md que cover:\n1. Descri\u00e7\u00e3o do projeto\n2. Tech stack (Python 3.11, Django 4.2, PostgreSQL)\n3. Setup/instala\u00e7\u00e3o (venv, pip, migrations)\n4. Como rodar localmente\n5. Endpoints principais (lista breve)\n6. Testing (como rodar testes)\n7. Deployment (instru\u00e7\u00f5es)\n8. Estrutura de pastas\n9. Como contribuir\n\nTone: Profissional mas amig\u00e1vel\nTarget audience: Novos devs no projeto\n</code></pre>\n<h3>Resultado</h3>\n<p>Markdown bem estruturado com:</p>\n<ul>\n<li>Badges (build status, version)</li>\n<li>Table of contents com links</li>\n<li>Code examples</li>\n<li>Instru\u00e7\u00f5es passo-a-passo</li>\n<li>Troubleshooting section</li>\n</ul>\n<p>---</p>\n<h2>Caso 3: API Documentation</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>FastAPI endpoints sem documenta\u00e7\u00e3o.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: FastAPI app com 20+ endpoints\n\nGere documentation.md que cover:\n\nPara cada endpoint:\n- HTTP verb + path\n- Descri\u00e7\u00e3o breve\n- Request body schema (exemplo JSON)\n- Response schema (exemplo JSON)\n- Status codes (200, 400, 401, 404, etc)\n- Exemplo de curl command\n- Rate limits (se houver)\n\nEstruture por resource:\n- /users\n- /orders\n- /products\netc\n\n[fornecer c\u00f3digo dos endpoints]\n</code></pre>\n<h3>Resultado</h3>\n<p>Markdown com documenta\u00e7\u00e3o clara:</p>\n<pre><code>\n## GET /api/users/:id\n\nRetrieve user by ID.\n\n### Response (200)\n\\`\\`\\`json\n{\n  \"id\": \"uuid\",\n  \"email\": \"user@example.com\",\n  \"created_at\": \"2026-05-23T...\"\n}\n\\`\\`\\`\n\n### cURL\n\\`\\`\\`bash\ncurl https://api.example.com/api/users/123\n\\`\\`\\`\n</code></pre>\n<p>---</p>\n<h2>Caso 4: Architecture Decision Record (ADR)</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Decis\u00f5es t\u00e9cnicas espalhadas, sem documenta\u00e7\u00e3o.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Decis\u00e3o de usar Redis para cache vs Memcached\n\nCrie ADR (Architecture Decision Record) que cover:\n\n1. Context: Por que precisava decidir?\n2. Decision: Escolhemos Redis\n3. Rationale: Por qu\u00ea? Trade-offs?\n4. Consequences: Impacto positivo/negativo\n5. Alternatives considered: Memcached, in-memory, etc\n6. Related decisions: Outras decis\u00f5es que dependem desta\n\nFormat: Markdown, conciso\n</code></pre>\n<h3>Resultado</h3>\n<pre><code>\n# ADR-001: Use Redis for Session Caching\n\n## Context\nApp needs fast session cache. Current in-memory grows \nunbounded and doesn't work with multi-process.\n\n## Decision\nUse Redis for session cache with automatic TTL.\n\n## Rationale\n- Redis is stateful, persistent (snapshots)\n- Better than Memcached for our use case (TTL control)\n- Simpler than building custom solution\n\n## Consequences\n+ Reliable session persistence\n+ Horizontal scaling (shared Redis)\n- Added dependency\n- Redis downtime affects sessions\n</code></pre>\n<p>---</p>\n<h2>Caso 5: Setup Guide</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Novo dev n\u00e3o consegue fazer setup local.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Python project com PostgreSQL, Redis, external APIs\n\nCrie SETUP.md que guide novo dev:\n\nPassos:\n1. Prerequisites (o que precisa instalar)\n2. Clone repo\n3. Virtual env setup\n4. Depend\u00eancias (.env, API keys)\n5. Database setup (migrations, seed data)\n6. Rodando localmente\n7. Troubleshooting (erros comuns)\n8. Como saber que deu certo (test suite)\n\nAssuma: Dev \u00e9 experiente mas novo no projeto\n</code></pre>\n<h3>Resultado</h3>\n<p>Markdown passo-a-passo com:</p>\n<ul>\n<li>Commands exatos</li>\n<li>Error outputs comuns + solu\u00e7\u00f5es</li>\n<li>Links para depend\u00eancias</li>\n<li>Video tutorial (se relevante)</li>\n<li>Contato para suporte</li>\n</ul>\n<p>---</p>\n<h2>Padr\u00e3o: Auto-gerar docs em CI</h2>\n<h3>Conceito</h3>\n<p>Documenta\u00e7\u00e3o fica sempre atualizada automaticamente.</p>\n<h3>Exemplo</h3>\n<pre><code>\n# CI/CD pipeline (GitHub Actions, etc)\n- name: Generate docs\n  run: |\n    claude-code \"Gere README.md baseado em package.json e estrutura\"\n    # Commits se houver mudan\u00e7as\n</code></pre>\n<p>---</p>\n<h2>Tipos de Documenta\u00e7\u00e3o</h2>\n<p>| Tipo | Para Quem | Exemplo |</p>\n<p>|---|---|---|</p>\n<p>| README | Novo usu\u00e1rio/dev | \"Como usar este projeto\" |</p>\n<p>| API Docs | Consumidor da API | \"Endpoints dispon\u00edveis\" |</p>\n<p>| Architecture | Tech lead | \"Por que estruturado assim\" |</p>\n<p>| Runbook | DevOps/SRE | \"Como deployar, troubleshoot\" |</p>\n<p>| Changelog | Usu\u00e1rios | \"O que mudou em v2.0\" |</p>\n<p>| ADR | Time t\u00e9cnica | \"Decis\u00f5es importantes\" |</p>\n<p>---</p>\n<h2>Ferramenta de Documenta\u00e7\u00e3o Recomendada</h2>\n<p>| Ferramenta | Linguagem | Uso |</p>\n<p>|---|---|---|</p>\n<p>| MkDocs | Markdown | Site de docs com busca |</p>\n<p>| Sphinx | reStructuredText | Docs profissionais (Python) |</p>\n<p>| Swagger/OpenAPI | YAML/JSON | API documentation |</p>\n<p>| Notion/Confluence | Web | Documenta\u00e7\u00e3o colaborativa |</p>\n<p>| GitHub Pages | Markdown | Site est\u00e1tico |</p>\n<p>---</p>\n<p><strong>Pr\u00f3ximo</strong>: <a href=\"05-AUTOMACAO-DEVOPS.md\">Automa\u00e7\u00e3o DevOps</a></p>"}, "5": {"title": "05-AUTOMACAO-DEVOPS", "html": "<h1>Automa\u00e7\u00e3o DevOps</h1>\n<h2>Caso 1: CI/CD Pipeline</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Deploy manual, sujeito a erro.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: GitHub Actions, Python/Django, PostgreSQL\n\nCrie workflow de CI/CD que:\n\nPush to main \u2192 Automaticamente:\n1. Run linters (black, isort, flake8)\n2. Run testes (pytest)\n3. Coverage report (>80% required)\n4. Build Docker image\n5. Push to registry\n6. Deploy to staging\n7. Run smoke tests\n8. If all ok \u2192 deploy to production\n\nRequisitos:\n- Matriz: Python 3.10, 3.11, 3.12\n- Cache dependencies\n- Slack notification on failure\n- Manual approval antes de prod\n</code></pre>\n<h3>Resultado</h3>\n<p>Claude gera `.github/workflows/deploy.yml` com:</p>\n<p>1. Multi-stage pipeline</p>\n<p>2. Conditional steps (s\u00f3 deploy se tests passam)</p>\n<p>3. Artifact storage</p>\n<p>4. Notifications</p>\n<p>5. Rollback strategy</p>\n<p>---</p>\n<h2>Caso 2: Infrastructure as Code</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Servidores configurados manualmente. Dif\u00edcil reproduzir.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Terraform, AWS, Django app\n\nCrie Terraform que provisiona:\n1. VPC com subnets\n2. RDS PostgreSQL (multi-AZ)\n3. ElastiCache Redis\n4. ECS cluster com ALB\n5. Route53 DNS\n6. CloudWatch logs\n\nRequisitos:\n- Staging e Production (different sizes)\n- Backup autom\u00e1tico (RDS)\n- Auto-scaling para EC2\n- Security groups restrictivos\n- SSL certificate (ACM)\n\n[fornecer current setup se tiver]\n</code></pre>\n<h3>Resultado</h3>\n<p>Terraform modules que:</p>\n<p>1. Reproducible</p>\n<p>2. Version controlled</p>\n<p>3. Testable (terraform plan)</p>\n<p>4. Documentado</p>\n<p>---</p>\n<h2>Caso 3: Monitoring e Alerting</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Produ\u00e7\u00e3o muda, ningu\u00e9m sabe que algo quebrou.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Prometheus + Grafana, Django app\n\nCrie alertas para:\n1. Erro rate >1% (5min average)\n2. Response time P95 >500ms\n3. Database connections >80% max\n4. Disk usage >90%\n5. Memory usage >85%\n6. Deployment failed\n7. SSL certificate expiring soon\n\nM\u00e9tricas customizadas:\n- User login failures\n- Payment processing errors\n- API rate limit exceeded\n\nNotifica\u00e7\u00f5es:\n- Slack para warnings\n- PagerDuty para cr\u00edtico\n- Email para infra issues\n</code></pre>\n<h3>Resultado</h3>\n<p>Prometheus rules + Grafana dashboards que:</p>\n<p>1. Alertam proativamente</p>\n<p>2. Contextualizam bem</p>\n<p>3. Actionable (n\u00e3o spam)</p>\n<p>---</p>\n<h2>Caso 4: Backup e Disaster Recovery</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>BD cai, sem backup recente.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: PostgreSQL, S3 buckets\n\nCrie estrat\u00e9gia de backup:\n1. Daily full backup (S3)\n2. Hourly incremental (S3)\n3. Point-in-time recovery (30 days)\n4. Cross-region replication (disaster recovery)\n5. Automated restore test (1x/week)\n\nRequisitos:\n- Backup encryption\n- Versioning em S3\n- Reten\u00e7\u00e3o policy (30 dias full, 90 dias incrementais)\n- Script de restore (documentado)\n- Health check (backups working?)\n\nAutoma\u00e7\u00e3o:\n- Cron job ou Lambda trigger\n- Logging em CloudWatch\n- Alert se backup falhar\n</code></pre>\n<h3>Resultado</h3>\n<p>Backup automation que:</p>\n<p>1. Robusto (redund\u00e2ncia)</p>\n<p>2. Testado (restore automation)</p>\n<p>3. Documentado (how to restore)</p>\n<p>4. Monitorado (alerts)</p>\n<p>---</p>\n<h2>Caso 5: Scaling Autom\u00e1tico</h2>\n<h3>Situa\u00e7\u00e3o</h3>\n<p>Peak traffic causa timeout, node cai.</p>\n<h3>Prompt</h3>\n<pre><code>\nContexto: Kubernetes, Docker, auto-scaling\n\nSetup auto-scaling que:\n1. Horizontal pod autoscaling (CPU >70% \u2192 scale up)\n2. Vertical scaling (memory >80%)\n3. Database scaling (read replicas quando querys lentas)\n4. Cache scaling (Redis cluster)\n5. Load balancing (round-robin)\n\nRequisitos:\n- Min replicas: 2 (availability)\n- Max replicas: 10 (cost)\n- Scaledown delay: 5 min (avoid thrashing)\n- Metrics to watch: CPU, Memory, Custom (requests/sec)\n\nHealth checks:\n- Liveness probe (is pod alive?)\n- Readiness probe (can accept traffic?)\n</code></pre>\n<h3>Resultado</h3>\n<p>Kubernetes manifests que:</p>\n<p>1. Auto-scale baseado em m\u00e9tricas</p>\n<p>2. High availability</p>\n<p>3. Cost optimized</p>\n<p>---</p>\n<h2>Padr\u00e3o: Infraestrutura Robusta</h2>\n<pre><code>\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502  Source Control (Git)            \u2502\n\u2502  - C\u00f3digo                        \u2502\n\u2502  - Infraestrutura (Terraform)    \u2502\n\u2502  - Configura\u00e7\u00e3o (YAML)           \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n             \u2502\n             \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502  CI/CD Pipeline                  \u2502\n\u2502  - Lint, test, build             \u2502\n\u2502  - Deploy to staging             \u2502\n\u2502  - Smoke tests                   \u2502\n\u2502  - Deploy to prod                \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n             \u2502\n             \u25bc\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502  Production                      \u2502\n\u2502  - Monitored (Prometheus)        \u2502\n\u2502  - Logged (ELK)                  \u2502\n\u2502  - Backed up (S3)                \u2502\n\u2502  - Auto-healing                  \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n</code></pre>\n<p>---</p>\n<h2>Exemplo Pr\u00e1tico: Deploy Robusto</h2>\n<h3>Requisitos</h3>\n<ul>\n<li>Django app em Kubernetes</li>\n<li>RDS PostgreSQL</li>\n<li>CloudFront CDN</li>\n<li>Route53 DNS</li>\n</ul>\n<h3>Automa\u00e7\u00e3o Claude Cria</h3>\n<p>1. <strong>GitHub Actions workflow</strong></p>\n<p>   - Run tests (pytest)</p>\n<p>   - Build Docker image</p>\n<p>   - Push to ECR</p>\n<p>   - Deploy rolling (0 downtime)</p>\n<p>2. <strong>Terraform</strong></p>\n<p>   - VPC, subnets, security groups</p>\n<p>   - RDS with backups</p>\n<p>   - CloudFront distribution</p>\n<p>   - Route53 A record</p>\n<p>3. <strong>Kubernetes manifests</strong></p>\n<p>   - Deployment with 3 replicas</p>\n<p>   - Service (load balancer)</p>\n<p>   - Horizontal autoscaler</p>\n<p>   - Health checks</p>\n<p>4. <strong>Monitoring</strong></p>\n<p>   - Prometheus scraping metrics</p>\n<p>   - Grafana dashboard</p>\n<p>   - Alerts for errors/latency</p>\n<p>5. <strong>Scripts</strong></p>\n<p>   - Backup script (daily)</p>\n<p>   - Rollback script (1-click)</p>\n<p>   - Health check script</p>\n<p>---</p>\n<h2>Ferramentas DevOps Populares</h2>\n<p>| Ferramenta | O que faz |</p>\n<p>|---|---|</p>\n<p>| Terraform | Infrastructure as Code |</p>\n<p>| Ansible | Configuration management |</p>\n<p>| Docker | Containerization |</p>\n<p>| Kubernetes | Orchestration |</p>\n<p>| GitHub Actions | CI/CD |</p>\n<p>| Jenkins | CI/CD (on-prem) |</p>\n<p>| Prometheus | Monitoring |</p>\n<p>| Grafana | Dashboards |</p>\n<p>| ELK Stack | Logging |</p>\n<p>| PagerDuty | On-call management |</p>\n<p>---</p>\n<p><strong>Voltar</strong>: <a href=\"01-PROCESSAMENTO-DADOS.md\">Processamento de Dados</a></p>"}};
         let current = parseInt(new URLSearchParams(window.location.search).get('topic') || '1');
         const total = 5;
+        const currentModule = '05';
+
+        const allModules = {
+            '01': ['Conceitos Fundamentais', 5],
+            '02': ['Arquitetura', 5],
+            '03': ['Comandos & Sintaxe', 5],
+            '04': ['Padrões de Uso', 5],
+            '05': ['Casos Reais', 4],
+            '06': ['Troubleshooting', 4],
+        };
+
+        const moduleFiles = {
+            '01': '01-conceitos-fundamentais',
+            '02': '02-arquitetura',
+            '03': '03-comandos--sintaxe',
+            '04': '04-padrões-de-uso',
+            '05': '05-casos-reais',
+            '06': '06-troubleshooting',
+        };
+
+        function buildSidebar() {
+            Object.entries(allModules).forEach(([modNum, [modName, topicCount]]) => {
+                const container = document.getElementById(`module-${modNum}`);
+                for (let i = 1; i <= topicCount; i++) {
+                    const link = document.createElement('a');
+                    link.href = `${moduleFiles[modNum]}.html?topic=${i}`;
+                    link.textContent = `Tópico ${i}`;
+                    if (modNum === currentModule && i === current) {
+                        link.classList.add('active');
+                    }
+                    container.appendChild(document.createElement('li')).appendChild(link);
+                }
+            });
+        }
 
         function render(n) {
             if (!topics[n]) return;
@@ -136,17 +377,37 @@
             document.getElementById('next-btn').href = current < total ? `?topic=${current + 1}` : '#';
             document.getElementById('next-btn').classList.toggle('disabled', current === total);
             window.history.replaceState({}, '', `?topic=${current}`);
+
+            // Update active link in sidebar
+            document.querySelectorAll('.sidebar-links a').forEach(a => {
+                a.classList.remove('active');
+            });
+            const currentLink = document.querySelector(`.sidebar-links a[href="${moduleFiles[currentModule]}.html?topic=${current}"]`);
+            if (currentLink) currentLink.classList.add('active');
         }
 
         document.getElementById('prev-btn').addEventListener('click', (e) => {
             if (current > 1) { current--; render(current); }
             e.preventDefault();
         });
+
         document.getElementById('next-btn').addEventListener('click', (e) => {
             if (current < total) { current++; render(current); }
             e.preventDefault();
         });
 
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        // Close sidebar on link click (mobile)
+        document.querySelectorAll('.sidebar-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('open');
+            });
+        });
+
+        buildSidebar();
         render(current);
     </script>
 </body>
