@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Notas internas de revisão pedagógica (não versionadas)
+**/REVISAO-PENDENTE-*.md
