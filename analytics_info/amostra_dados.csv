@@ -1,0 +1,78 @@
+estrutura_codigo,estrutura_nome,periodo,rubrica_codigo,rubrica_nome,grupo_rubrica,orcado_mes,realizado_mes,orcado_acumulado,realizado_acumulado,comprometido,orcado_ano_anterior
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-10,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,185000,198400,1295000,1421300,45000,142000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-10,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,39800,672000,658200,12000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-10,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,314200,3100000,3118400,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-10,3.3.50.05,Manutenção de Equipamentos,Manutenção,38000,52100,228000,241800,18000,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-10,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,4200,150000,58300,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-10,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,9100,80000,87400,2000,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-10,3.5.10.01,Viagens e Diárias,Administrativo,5000,3800,50000,38200,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-09,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,175000,189200,1110000,1222900,42000,138000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-09,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,41500,630000,618400,12000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-09,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,311800,2790000,2804200,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-09,3.3.50.05,Manutenção de Equipamentos,Manutenção,38000,44300,190000,189700,15000,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-09,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,6100,135000,54100,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-09,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,8700,72000,78300,2000,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-09,3.5.10.01,Viagens e Diárias,Administrativo,5000,4100,45000,34400,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-08,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,165000,178900,935000,1033700,38000,135000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-08,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,40100,588000,576900,12000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-08,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,328400,2480000,2492400,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-08,3.3.50.05,Manutenção de Equipamentos,Manutenção,28000,29800,152000,145400,10000,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-08,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,8900,120000,48000,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-08,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,8200,64000,69600,1500,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-08,3.5.10.01,Viagens e Diárias,Administrativo,5000,5200,40000,30300,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-07,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,155000,161400,770000,854800,35000,130000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-07,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,40800,546000,536800,12000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-07,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,312100,2170000,2164000,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-07,3.3.50.05,Manutenção de Equipamentos,Manutenção,28000,27400,124000,115600,8000,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-07,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,9200,105000,39100,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-07,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,7900,56000,61400,1500,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-07,3.5.10.01,Viagens e Diárias,Administrativo,5000,4400,35000,25100,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-06,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,130000,134200,615000,693400,30000,125000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-06,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,41200,504000,496000,10000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-06,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,309800,1860000,1851900,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-06,3.3.50.05,Manutenção de Equipamentos,Manutenção,28000,26200,96000,88200,5000,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-06,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,7400,90000,29900,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-06,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,7600,48000,53500,1000,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-06,3.5.10.01,Viagens e Diárias,Administrativo,5000,3800,30000,20700,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-05,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,128000,131800,485000,559200,28000,122000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-05,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,40600,462000,454800,10000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-05,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,308900,1550000,1542100,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-05,3.3.50.05,Manutenção de Equipamentos,Manutenção,28000,24500,68000,62000,4000,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-05,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,6700,75000,22500,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-05,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,8100,40000,45900,1000,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-05,3.5.10.01,Viagens e Diárias,Administrativo,5000,3600,25000,16900,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-04,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,126000,128700,357000,427400,25000,120000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-04,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,39900,420000,414200,10000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-04,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,309200,1240000,1233200,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-04,3.3.50.05,Manutenção de Equipamentos,Manutenção,28000,25100,40000,37500,3000,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-04,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,6900,60000,15800,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-04,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,7800,32000,37800,1000,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-04,3.5.10.01,Viagens e Diárias,Administrativo,5000,4100,20000,13300,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-03,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,124000,125900,231000,298700,22000,118000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-03,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,178400,378000,374300,8000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-03,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,309800,930000,924000,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-03,3.3.50.05,Manutenção de Equipamentos,Manutenção,12000,12400,12000,12400,2000,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-03,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,5300,45000,8900,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-03,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,8800,24000,30000,500,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-03,3.5.10.01,Viagens e Diárias,Administrativo,5000,5400,15000,9200,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-02,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,107000,110900,107000,172800,20000,115000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-02,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,39400,336000,195900,8000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-02,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,307500,620000,614200,0,298000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-02,3.3.50.05,Manutenção de Equipamentos,Manutenção,0,0,0,0,0,32000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-02,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,2400,30000,3600,0,12000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-02,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,7500,16000,21200,500,7200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-02,3.5.10.01,Viagens e Diárias,Administrativo,5000,2100,10000,3800,0,4500
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-01,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,107000,61900,107000,61900,18000,112000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-01,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,42000,41200,42000,156500,7000,38000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-01,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,310000,306700,310000,306700,0,295000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-01,3.3.50.05,Manutenção de Equipamentos,Manutenção,0,0,0,0,0,30000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-01,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,15000,1200,15000,1200,0,10000
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-01,3.2.20.01,Materiais de Consumo e TI,Materiais,8000,7100,8000,13700,500,6800
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2024-01,3.5.10.01,Viagens e Diárias,Administrativo,5000,1700,5000,1700,0,4200
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2023-10,3.3.90.10,Serviços de Terceiros - Cloud e Hosting,Serviços de Terceiros,142000,151200,1065000,1098400,40000,0
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2023-10,3.3.90.20,Licenças e Softwares,Serviços de Terceiros,38000,37400,608000,601800,10000,0
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2023-10,3.1.10.01,Pessoal - Salários e Encargos,Pessoal,298000,301100,2980000,2998200,0,0
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2023-10,3.3.50.05,Manutenção de Equipamentos,Manutenção,32000,38400,192000,201600,15000,0
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2023-10,3.4.10.02,Treinamento e Capacitação,Desenvolvimento,12000,4800,120000,48200,0,0
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2023-10,3.2.20.01,Materiais de Consumo e TI,Materiais,7200,7800,72000,76400,1500,0
+TI-GER-002,Gerência de Infraestrutura e Operações de TI,2023-10,3.5.10.01,Viagens e Diárias,Administrativo,4500,3600,45000,32800,0,0

@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FP&A — Métricas de Orçado vs Realizado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1f1f1f;
+    --border: #2e2e2e;
+    --text: #e8e3d8;
+    --text-dim: #7a7670;
+    --text-mid: #a8a49e;
+    --red: #e05c4b;
+    --green: #4caf7d;
+    --amber: #d4a847;
+    --blue: #5b9bd5;
+    --teal: #4aadab;
+    --lavender: #9b85d4;
+    --accent: #e05c4b;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  /* NAV TABS */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,13,13,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    padding: 0 40px;
+  }
+
+  .nav a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 16px 20px;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .nav a:hover {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 60px 60px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "BUDGET\AACTUAL";
+    white-space: pre;
+    position: absolute;
+    right: -20px;
+    top: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.02);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text-mid);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .hero-stat .lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* GRID LAYOUT */
+  .content {
+    padding: 0 40px 80px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  /* SECTION HEADER */
+  .section {
+    padding-top: 64px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-index {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .section-header .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 4px 10px;
+    border: 1px solid;
+    border-radius: 2px;
+  }
+
+  .badge-core { color: var(--green); border-color: var(--green); }
+  .badge-diag { color: var(--amber); border-color: var(--amber); }
+  .badge-risk { color: var(--red); border-color: var(--red); }
+  .badge-adv  { color: var(--lavender); border-color: var(--lavender); }
+
+  /* METRIC CARDS GRID */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .metric-card {
+    background: var(--surface);
+    padding: 28px;
+    position: relative;
+    cursor: default;
+    transition: background 0.2s;
+  }
+
+  .metric-card:hover {
+    background: var(--surface2);
+  }
+
+  .metric-card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-color, #555);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .metric-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .metric-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 7px;
+    background: rgba(255,255,255,0.05);
+    color: var(--text-dim);
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .formula {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--card-color, #555);
+    padding: 10px 12px;
+    margin: 12px 0;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .metric-desc {
+    font-size: 13.5px;
+    color: var(--text-mid);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .signals {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .signal {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    align-items: flex-start;
+  }
+
+  .signal .icon { flex-shrink: 0; font-size: 10px; margin-top: 1px; }
+  .signal .text { color: var(--text-dim); }
+
+  .sig-good  { color: var(--green); }
+  .sig-warn  { color: var(--amber); }
+  .sig-bad   { color: var(--red); }
+  .sig-info  { color: var(--blue); }
+
+  /* WATCHOUT BANNER */
+  .watchout {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: rgba(224,92,75,0.08);
+    border: 1px solid rgba(224,92,75,0.2);
+    border-radius: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+  }
+
+  .watchout::before { content: "⚠ "; }
+
+  /* REFERENCE TABLE */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+
+  .ref-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ref-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(46,46,46,0.6);
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  .ref-table tr:hover td {
+    background: rgba(255,255,255,0.02);
+    color: var(--text);
+  }
+
+  .ref-table td:first-child {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .ref-table td.mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+  }
+
+  /* READING GUIDE */
+  .reading-guide {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px;
+    margin-top: 40px;
+  }
+
+  .reading-guide h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .guide-item {
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .guide-item .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+
+  .guide-item p {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 40px 20px; }
+    .hero-stats { flex-wrap: wrap; gap: 20px; }
+    .content { padding: 0 20px 60px; }
+    .guide-grid { grid-template-columns: 1fr; }
+    .nav { padding: 0 20px; }
+    .metrics-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ENTRY ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .metric-card {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .metric-card:nth-child(1) { animation-delay: 0.05s; }
+  .metric-card:nth-child(2) { animation-delay: 0.10s; }
+  .metric-card:nth-child(3) { animation-delay: 0.15s; }
+  .metric-card:nth-child(4) { animation-delay: 0.20s; }
+  .metric-card:nth-child(5) { animation-delay: 0.25s; }
+  .metric-card:nth-child(6) { animation-delay: 0.30s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#core">Execução</a>
+  <a href="#projecao">Projeção</a>
+  <a href="#risco">Risco</a>
+  <a href="#avancadas">Avançadas</a>
+  <a href="#referencia">Referência Rápida</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">FP&A · Métricas · Orçado vs Realizado</div>
+  <h1>O que cada<br>número <em>realmente</em><br>está dizendo</h1>
+  <p class="hero-sub">
+    Um guia de referência das métricas mais relevantes para análise orçamentária — com fórmulas, interpretações e os sinais que cada uma emite quando algo merece atenção.
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="num">4</div>
+      <div class="lbl">grupos de métricas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">17</div>
+      <div class="lbl">métricas mapeadas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">∞</div>
+      <div class="lbl">combinações por área</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ======================== GRUPO 1: EXECUÇÃO ======================== -->
+  <div class="section" id="core">
+    <div class="section-header">
+      <span class="section-index">01</span>
+      <h2>Execução Orçamentária</h2>
+      <span class="badge badge-core">essenciais</span>
+    </div>
+
+    <div class="metrics-grid">
+
+      <!-- Variação Absoluta -->
+      <div class="metric-card" style="--card-color: #4caf7d;">
+        <div class="card-header">
+          <div class="metric-name">Variação Absoluta</div>
+          <div class="metric-tag">R$</div>
+        </div>
+        <div class="formula">ΔR$ = Realizado − Orçado</div>
+        <p class="metric-desc">A diferença em reais entre o que foi gasto/arrecadado e o que estava previsto. É a métrica mais direta, mas precisa de contexto — um desvio de R$10k em uma área de R$100k é muito diferente de uma área de R$10M.</p>
+        <div class="signals">
+          <div class="signal sig-good"><span class="icon">▼</span><span class="text">Negativo em despesa = gasto abaixo do previsto (economia)</span></div>
+          <div class="signal sig-bad"><span class="icon">▲</span><span class="text">Positivo em despesa = estouro de orçamento</span></div>
+          <div class="signal sig-info"><span class="icon">→</span><span class="text">Leia sempre junto com a variação percentual</span></div>
+        </div>
+      </div>
+
+      <!-- Variação % -->
+      <div class="metric-card" style="--card-color: #4caf7d;">
+        <div class="card-header">
+          <div class="metric-name">Variação Percentual</div>
+          <div class="metric-tag">%</div>
+        </div>
+        <div class="formula">Δ% = (Realizado − Orçado) / |Orçado| × 100</div>
+        <p class="metric-desc">Normaliza o desvio em relação ao orçamento. Permite comparar áreas de tamanhos diferentes na mesma régua. Um desvio de 40% em qualquer área merece atenção, independente do porte.</p>
+        <div class="signals">
+          <div class="signal sig-good"><span class="icon">✓</span><span class="text">±5% → dentro da faixa de confiança orçamentária</span></div>
+          <div class="signal sig-warn"><span class="icon">!</span><span class="text">±10–20% → sinal amarelo, investigar rubrica</span></div>
+          <div class="signal sig-bad"><span class="icon">✗</span><span class="text">&gt;20% → sinal vermelho, requer explicação formal</span></div>
+        </div>
+        <div class="watchout">Use |Orçado| no denominador para evitar sinais incorretos com orçamentos negativos.</div>
+      </div>
+
+      <!-- % de Execução -->
+      <div class="metric-card" style="--card-color: #4caf7d;">
+        <div class="card-header">
+          <div class="metric-name">% de Execução</div>
+          <div class="metric-tag">índice</div>
+        </div>
+        <div class="formula">Exec% = Realizado / Orçado × 100</div>
+        <p class="metric-desc">Quanto do orçamento foi efetivamente utilizado. Diferente da variação, foca na proporção consumida — útil para identificar áreas que cronicamente subutilizam seus recursos, sinalizando orçamentos superdimensionados ou capacidade de entrega baixa.</p>
+        <div class="signals">
+          <div class="signal sig-good"><span class="icon">→</span><span class="text">95–100% = execução ótima</span></div>
+          <div class="signal sig-warn"><span class="icon">→</span><span class="text">&lt;70% recorrente = possível super-orçamento</span></div>
+          <div class="signal sig-bad"><span class="icon">→</span><span class="text">&gt;105% = estouro, requer aprovação de suplementação</span></div>
+        </div>
+      </div>
+
+      <!-- Execução no Período -->
+      <div class="metric-card" style="--card-color: #4caf7d;">
+        <div class="card-header">
+          <div class="metric-name">Execução no Período</div>
+          <div class="metric-tag">mensal / trimestral</div>
+        </div>
+        <div class="formula">Exec_período = Real_mês / Orç_mês</div>
+        <p class="metric-desc">Versão da execução para o recorte de tempo específico — mês ou trimestre. Essencial para identificar se o desvio acumulado vem de um evento pontual (um mês ruim) ou de um padrão estrutural.</p>
+        <div class="signals">
+          <div class="signal sig-info"><span class="icon">→</span><span class="text">Pico em mês específico → investigar evento não-recorrente</span></div>
+          <div class="signal sig-warn"><span class="icon">→</span><span class="text">Padrão de 3+ meses consecutivos → problema estrutural</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== GRUPO 2: PROJEÇÃO ======================== -->
+  <div class="section" id="projecao">
+    <div class="section-header">
+      <span class="section-index">02</span>
+      <h2>Projeção e Tendência</h2>
+      <span class="badge badge-diag">diagnóstico</span>
+    </div>
+
+    <div class="metrics-grid">
+
+      <!-- Run Rate -->
+      <div class="metric-card" style="--card-color: #d4a847;">
+        <div class="card-header">
+          <div class="metric-name">Run Rate</div>
+          <div class="metric-tag">projeção</div>
+        </div>
+        <div class="formula">Run Rate = (Real_acumulado / Meses passados) × 12</div>
+        <p class="metric-desc">Projeta o gasto anual com base no ritmo atual. É a resposta para "se continuar assim, quanto vou gastar no ano?". Extremamente útil em revisões orçamentárias de meio de ano (MYR).</p>
+        <div class="signals">
+          <div class="signal sig-bad"><span class="icon">▲</span><span class="text">Run Rate &gt; Orçamento anual → risco de estouro</span></div>
+          <div class="signal sig-warn"><span class="icon">→</span><span class="text">Comparar com sazonalidade histórica para validar</span></div>
+          <div class="signal sig-info"><span class="icon">!</span><span class="text">Cuidado com meses atípicos que distorcem a projeção</span></div>
+        </div>
+      </div>
+
+      <!-- Saldo Orçamentário -->
+      <div class="metric-card" style="--card-color: #d4a847;">
+        <div class="card-header">
+          <div class="metric-name">Saldo Disponível</div>
+          <div class="metric-tag">R$ restante</div>
+        </div>
+        <div class="formula">Saldo = Orçado_anual − Real_acumulado</div>
+        <p class="metric-desc">Quanto resta do orçamento para ser executado até o fim do ciclo. Parece simples, mas quando cruzado com o run rate e os meses restantes, vira uma das métricas mais poderosas para gestão de risco fiscal.</p>
+        <div class="signals">
+          <div class="signal sig-bad"><span class="icon">✗</span><span class="text">Saldo &lt; 0 → estouro consumado</span></div>
+          <div class="signal sig-warn"><span class="icon">!</span><span class="text">Saldo &lt; Run Rate × Meses restantes → estouro projetado</span></div>
+          <div class="signal sig-good"><span class="icon">✓</span><span class="text">Saldo proporcionalmente adequado ao período restante</span></div>
+        </div>
+      </div>
+
+      <!-- Forecast Gap -->
+      <div class="metric-card" style="--card-color: #d4a847;">
+        <div class="card-header">
+          <div class="metric-name">Forecast Gap</div>
+          <div class="metric-tag">gap</div>
+        </div>
+        <div class="formula">Gap = Forecast_revisado − Orçado_original</div>
+        <p class="metric-desc">Diferença entre o que o time agora projeta gastar (forecast) e o que estava no orçamento aprovado. Mede o quanto a realidade se afastou do plano. Fundamental em ciclos com revisões de forecast (rolling forecast).</p>
+        <div class="signals">
+          <div class="signal sig-bad"><span class="icon">▲</span><span class="text">Gap positivo em despesa → área vai estourar</span></div>
+          <div class="signal sig-good"><span class="icon">▼</span><span class="text">Gap negativo em despesa → economia projetada</span></div>
+          <div class="signal sig-info"><span class="icon">→</span><span class="text">Monitore a qualidade do forecast: o gap diminui com o tempo?</span></div>
+        </div>
+      </div>
+
+      <!-- Aceleração de Gasto -->
+      <div class="metric-card" style="--card-color: #d4a847;">
+        <div class="card-header">
+          <div class="metric-name">Aceleração de Gasto</div>
+          <div class="metric-tag">velocidade</div>
+        </div>
+        <div class="formula">Δ Ritmo = Real_mêsN − Real_mêsN-1</div>
+        <p class="metric-desc">A "derivada" do realizado — mede se o gasto está acelerando ou desacelerando. Detecta tendências precocemente, antes que o desvio apareça no acumulado. Uma área com execução dentro do limite mas com forte aceleração já é um sinal de alerta.</p>
+        <div class="signals">
+          <div class="signal sig-bad"><span class="icon">↗</span><span class="text">Aceleração consistente → estouro à vista, agir agora</span></div>
+          <div class="signal sig-good"><span class="icon">↘</span><span class="text">Desaceleração → controle sendo reestabelecido</span></div>
+          <div class="signal sig-info"><span class="icon">~</span><span class="text">Variação sazonal esperada pode confundir — contextualize</span></div>
+        </div>
+      </div>
+
+      <!-- MoM e YoY -->
+      <div class="metric-card" style="--card-color: #d4a847;">
+        <div class="card-header">
+          <div class="metric-name">MoM / YoY</div>
+          <div class="metric-tag">comparativo</div>
+        </div>
+        <div class="formula">
+          MoM = (Real_mês / Real_mês-1) − 1<br>
+          YoY = (Real_mês / Real_mesmo_mês_ano-1) − 1
+        </div>
+        <p class="metric-desc">Comparam o realizado com períodos anteriores — mês anterior (MoM) ou mesmo mês do ano passado (YoY). O YoY é especialmente poderoso para eliminar sazonalidade e revelar tendências estruturais de crescimento ou queda.</p>
+        <div class="signals">
+          <div class="signal sig-info"><span class="icon">→</span><span class="text">YoY crescendo muito acima da inflação → pressão estrutural</span></div>
+          <div class="signal sig-warn"><span class="icon">→</span><span class="text">MoM volátil + YoY estável → sazonalidade normal</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== GRUPO 3: RISCO ======================== -->
+  <div class="section" id="risco">
+    <div class="section-header">
+      <span class="section-index">03</span>
+      <h2>Alertas e Risco Fiscal</h2>
+      <span class="badge badge-risk">monitoramento</span>
+    </div>
+
+    <div class="metrics-grid">
+
+      <!-- Índice de Comprometimento -->
+      <div class="metric-card" style="--card-color: #e05c4b;">
+        <div class="card-header">
+          <div class="metric-name">Índice de Comprometimento</div>
+          <div class="metric-tag">pressão futura</div>
+        </div>
+        <div class="formula">IC = (Real + Comprometido_futuro) / Orçado_anual</div>
+        <p class="metric-desc">Vai além do realizado: inclui obrigações já assumidas (contratos, empenhos, pedidos aprovados) que ainda não saíram no caixa. Mostra a pressão <em>real</em> sobre o orçamento, não só o que já aconteceu.</p>
+        <div class="signals">
+          <div class="signal sig-bad"><span class="icon">✗</span><span class="text">&gt;100% → área já estourou, mesmo sem o gasto ter saído</span></div>
+          <div class="signal sig-warn"><span class="icon">!</span><span class="text">80–100% com meses pela frente → espaço de manobra mínimo</span></div>
+          <div class="signal sig-good"><span class="icon">✓</span><span class="text">&lt;70% no meio do ano → boa folga operacional</span></div>
+        </div>
+      </div>
+
+      <!-- Concentração de Desvio -->
+      <div class="metric-card" style="--card-color: #e05c4b;">
+        <div class="card-header">
+          <div class="metric-name">Concentração de Desvio</div>
+          <div class="metric-tag">diagnóstico</div>
+        </div>
+        <div class="formula">Conc% = ΔR$_rubrica / ΔR$_total_área × 100</div>
+        <p class="metric-desc">Quanto do desvio total de uma área vem de uma única rubrica. Quando uma conta explica mais de 60–70% do desvio, o problema (ou a solução) é pontual e específico — muito mais fácil de endereçar do que um desvio pulverizado.</p>
+        <div class="signals">
+          <div class="signal sig-info"><span class="icon">→</span><span class="text">&gt;70% em uma rubrica → foco de investigação claro</span></div>
+          <div class="signal sig-warn"><span class="icon">→</span><span class="text">Desvio pulverizado (&lt;20% por rubrica) → problema sistêmico</span></div>
+        </div>
+      </div>
+
+      <!-- Burn Rate -->
+      <div class="metric-card" style="--card-color: #e05c4b;">
+        <div class="card-header">
+          <div class="metric-name">Burn Rate</div>
+          <div class="metric-tag">velocidade de consumo</div>
+        </div>
+        <div class="formula">Burn = Real_acumulado / Meses_passados</div>
+        <p class="metric-desc">Quantos reais por mês a área está consumindo em média. Aplicado ao saldo disponível, responde: "em quantos meses o orçamento se esgota com esse ritmo?". Meses_restantes = Saldo / Burn Rate.</p>
+        <div class="signals">
+          <div class="signal sig-bad"><span class="icon">↑</span><span class="text">Burn crescente + saldo decrescente = risco iminente</span></div>
+          <div class="signal sig-info"><span class="icon">→</span><span class="text">Calcule Meses até esgotamento e compare com período restante</span></div>
+        </div>
+      </div>
+
+      <!-- Desvio Atípico Sazonal -->
+      <div class="metric-card" style="--card-color: #e05c4b;">
+        <div class="card-header">
+          <div class="metric-name">Desvio Sazonal</div>
+          <div class="metric-tag">comparativo histórico</div>
+        </div>
+        <div class="formula">Δ_sazonal = Real_mês − Média_hist_mesmo_mês</div>
+        <p class="metric-desc">Compara o realizado do mês com a média histórica do mesmo mês em anos anteriores. Filtra o ruído de sazonalidade e isola variações genuinamente anômalas — fundamentais para evitar falsos alertas em períodos de pico previsto.</p>
+        <div class="signals">
+          <div class="signal sig-good"><span class="icon">✓</span><span class="text">Desvio dentro do padrão histórico → sazonalidade normal</span></div>
+          <div class="signal sig-bad"><span class="icon">✗</span><span class="text">Desvio &gt;2σ do histórico → anomalia real a investigar</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== GRUPO 4: AVANÇADAS ======================== -->
+  <div class="section" id="avancadas">
+    <div class="section-header">
+      <span class="section-index">04</span>
+      <h2>Métricas Avançadas</h2>
+      <span class="badge badge-adv">análise profunda</span>
+    </div>
+
+    <div class="metrics-grid">
+
+      <!-- Budget Accuracy / Acurácia do Orçamento -->
+      <div class="metric-card" style="--card-color: #9b85d4;">
+        <div class="card-header">
+          <div class="metric-name">Acurácia do Orçamento</div>
+          <div class="metric-tag">qualidade do plano</div>
+        </div>
+        <div class="formula">Acurácia = 1 − |Real − Orçado| / Orçado</div>
+        <p class="metric-desc">Mede a <em>qualidade do planejamento</em>, não só a execução. Uma área que sempre desvia 30% para cima está com orçamento sistematicamente subdimensionado. Tendência histórica de acurácia revela se o processo orçamentário é confiável.</p>
+        <div class="signals">
+          <div class="signal sig-good"><span class="icon">✓</span><span class="text">&gt;90% → planejamento confiável</span></div>
+          <div class="signal sig-warn"><span class="icon">!</span><span class="text">70–90% → revisão do processo de previsão</span></div>
+          <div class="signal sig-bad"><span class="icon">✗</span><span class="text">&lt;70% → orçamento não é referência real</span></div>
+        </div>
+      </div>
+
+      <!-- Índice de Realinhamento -->
+      <div class="metric-card" style="--card-color: #9b85d4;">
+        <div class="card-header">
+          <div class="metric-name">Viés Sistemático</div>
+          <div class="metric-tag">padrão de desvio</div>
+        </div>
+        <div class="formula">Viés = média(Δ%) nos últimos N ciclos</div>
+        <p class="metric-desc">Se uma área consistentemente orça acima e gasta abaixo (ou vice-versa), existe um viés comportamental no planejamento. Pode indicar sandbagging (folga intencional) ou pressão política sobre as metas.</p>
+        <div class="signals">
+          <div class="signal sig-warn"><span class="icon">→</span><span class="text">Viés consistente &gt; ±10% por 3+ ciclos → problema de processo</span></div>
+          <div class="signal sig-info"><span class="icon">→</span><span class="text">Útil para calibrar o próximo ciclo orçamentário</span></div>
+        </div>
+      </div>
+
+      <!-- EAC — Estimate At Completion -->
+      <div class="metric-card" style="--card-color: #9b85d4;">
+        <div class="card-header">
+          <div class="metric-name">EAC — Projeção Final</div>
+          <div class="metric-tag">Estimate at Completion</div>
+        </div>
+        <div class="formula">
+          EAC = Real_acum + (Saldo_orçado / CPI)<br>
+          CPI = Real_acum / Orçado_acum
+        </div>
+        <p class="metric-desc">Projeção do custo total ao final do ciclo, ajustada pela eficiência de execução histórica (CPI). Se o CPI está abaixo de 1 (gastando mais que o planejado), o EAC será maior que o orçamento — e vice-versa.</p>
+        <div class="signals">
+          <div class="signal sig-bad"><span class="icon">▲</span><span class="text">EAC &gt; Orçado → projeção de estouro corrigida pelo ritmo real</span></div>
+          <div class="signal sig-good"><span class="icon">▼</span><span class="text">EAC &lt; Orçado → economia projetada</span></div>
+        </div>
+      </div>
+
+      <!-- Índice de Realocação -->
+      <div class="metric-card" style="--card-color: #9b85d4;">
+        <div class="card-header">
+          <div class="metric-name">Potencial de Realocação</div>
+          <div class="metric-tag">gestão de portfólio</div>
+        </div>
+        <div class="formula">
+          Realoc = Saldo_disponível − (Burn × Meses_rest)<br>
+          positivo = folga real
+        </div>
+        <p class="metric-desc">Identifica áreas com folga orçamentária real — que provavelmente não vão usar o saldo — e quantifica o quanto pode ser realocado para áreas em pressão. Fundamental para otimização de portfólio no meio do ciclo.</p>
+        <div class="signals">
+          <div class="signal sig-info"><span class="icon">→</span><span class="text">Positivo alto + execução baixa histórica → candidato a realocação</span></div>
+          <div class="signal sig-warn"><span class="icon">!</span><span class="text">Cuidado: gastos de final de ano podem absorver a folga</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== TABELA DE REFERÊNCIA ======================== -->
+  <div class="section" id="referencia">
+    <div class="section-header">
+      <span class="section-index">05</span>
+      <h2>Referência Rápida</h2>
+      <span class="badge badge-core">todas as métricas</span>
+    </div>
+
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Métrica</th>
+          <th>Fórmula</th>
+          <th>Pergunta que responde</th>
+          <th>Alerta típico</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Variação Absoluta</td>
+          <td class="mono">Real − Orçado</td>
+          <td>Quanto desviou em reais?</td>
+          <td>Material + recorrente</td>
+        </tr>
+        <tr>
+          <td>Variação %</td>
+          <td class="mono">(Real − Orç) / |Orç|</td>
+          <td>Desvio proporcional ao plano?</td>
+          <td>&gt;10% em qualquer área</td>
+        </tr>
+        <tr>
+          <td>% de Execução</td>
+          <td class="mono">Real / Orçado</td>
+          <td>Quanto do orçamento foi usado?</td>
+          <td>&lt;70% ou &gt;105%</td>
+        </tr>
+        <tr>
+          <td>Run Rate</td>
+          <td class="mono">(Real_acum / n) × 12</td>
+          <td>Se continuar assim, quanto gasto no ano?</td>
+          <td>Run Rate &gt; Orçamento anual</td>
+        </tr>
+        <tr>
+          <td>Saldo Disponível</td>
+          <td class="mono">Orçado − Real_acum</td>
+          <td>Quanto ainda posso gastar?</td>
+          <td>Saldo &lt; Run Rate × Meses rest.</td>
+        </tr>
+        <tr>
+          <td>Forecast Gap</td>
+          <td class="mono">Forecast − Orçado_orig</td>
+          <td>O forecast revisado é melhor ou pior?</td>
+          <td>Gap crescendo entre ciclos</td>
+        </tr>
+        <tr>
+          <td>Aceleração</td>
+          <td class="mono">Real_N − Real_N-1</td>
+          <td>O gasto está acelerando?</td>
+          <td>3+ meses de aceleração seguida</td>
+        </tr>
+        <tr>
+          <td>MoM</td>
+          <td class="mono">Real_mês / Real_mês-1 − 1</td>
+          <td>Como estou vs mês anterior?</td>
+          <td>Salto sem evento justificado</td>
+        </tr>
+        <tr>
+          <td>YoY</td>
+          <td class="mono">Real_mês / Real_ano-1 − 1</td>
+          <td>Como estou vs mesmo período do ano passado?</td>
+          <td>Crescimento real acima da inflação</td>
+        </tr>
+        <tr>
+          <td>Índice de Comprometimento</td>
+          <td class="mono">(Real + Compromiss.) / Orçado</td>
+          <td>Incluindo obrigações, onde estou?</td>
+          <td>&gt;90% com meses restantes</td>
+        </tr>
+        <tr>
+          <td>Concentração de Desvio</td>
+          <td class="mono">ΔR$_rubrica / ΔR$_total</td>
+          <td>De onde vem o desvio?</td>
+          <td>&gt;70% em uma rubrica</td>
+        </tr>
+        <tr>
+          <td>Burn Rate</td>
+          <td class="mono">Real_acum / Meses passados</td>
+          <td>Qual meu consumo médio mensal?</td>
+          <td>Saldo / Burn &lt; Meses restantes</td>
+        </tr>
+        <tr>
+          <td>Desvio Sazonal</td>
+          <td class="mono">Real_mês − Média_hist_mês</td>
+          <td>É anomalia ou sazonalidade?</td>
+          <td>Desvio &gt;2σ do histórico</td>
+        </tr>
+        <tr>
+          <td>Acurácia do Orçamento</td>
+          <td class="mono">1 − |Real − Orç| / Orç</td>
+          <td>Nosso planejamento é confiável?</td>
+          <td>&lt;80% por 2+ ciclos</td>
+        </tr>
+        <tr>
+          <td>Viés Sistemático</td>
+          <td class="mono">Média(Δ%) histórica</td>
+          <td>Temos padrão de super/sub-orçar?</td>
+          <td>±10% por 3+ ciclos</td>
+        </tr>
+        <tr>
+          <td>EAC</td>
+          <td class="mono">Real + (Saldo / CPI)</td>
+          <td>Qual a projeção final corrigida?</td>
+          <td>EAC &gt; Orçado</td>
+        </tr>
+        <tr>
+          <td>Potencial de Realocação</td>
+          <td class="mono">Saldo − (Burn × Meses rest.)</td>
+          <td>Tenho folga real para realocar?</td>
+          <td>Positivo em áreas com baixa execução histórica</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- READING GUIDE -->
+    <div class="reading-guide">
+      <h3>Como combinar as métricas por situação</h3>
+      <div class="guide-grid">
+        <div class="guide-item">
+          <div class="label" style="color: var(--red);">Suspeita de estouro</div>
+          <p>Variação % + Run Rate + Burn Rate + Índice de Comprometimento. Se todos apontam na mesma direção, o risco é real.</p>
+        </div>
+        <div class="guide-item">
+          <div class="label" style="color: var(--amber);">Revisão orçamentária</div>
+          <p>Acurácia histórica + Viés Sistemático + EAC. Calibre o próximo orçamento com base no padrão real de comportamento da área.</p>
+        </div>
+        <div class="guide-item">
+          <div class="label" style="color: var(--green);">Realocação de recursos</div>
+          <p>Potencial de Realocação + Execução histórica + Saldo. Identifique doadores e receptores com base em evidência, não intuição.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>FP&A · Métricas de Referência</span>
+  <span>17 métricas · 4 grupos · uso livre</span>
+</div>
+
+</body>
+</html>

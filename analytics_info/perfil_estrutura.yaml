@@ -1,0 +1,124 @@
+# =============================================================================
+# PERFIL DA ESTRUTURA — FP&A Analytics POC
+# Versão: 1.0 | Ciclo: 2025
+# =============================================================================
+# Este arquivo define o contexto da área para personalização das análises.
+# Preencha um arquivo por estrutura. Mantenha consistência nos campos obrigatórios.
+# =============================================================================
+
+# ── IDENTIDADE ────────────────────────────────────────────────────────────────
+identidade:
+  codigo: "TI-GER-002"
+  nome: "Gerência de Infraestrutura e Operações de TI"
+  sigla: "GIOTI"
+  nivel_hierarquico: "gerencia"           # diretoria | gerencia | coordenacao
+  area_pai: "DIR-TI-001"                  # código da estrutura superior
+  areas_filhas:                           # coordenações subordinadas
+    - codigo: "TI-COO-004"
+      nome: "Coordenação de Redes e Datacenter"
+    - codigo: "TI-COO-005"
+      nome: "Coordenação de Suporte e Service Desk"
+    - codigo: "TI-COO-006"
+      nome: "Coordenação de Segurança da Informação"
+
+# ── CONTEXTO DE NEGÓCIO ───────────────────────────────────────────────────────
+negocio:
+  missao: >
+    Garantir a disponibilidade, performance e segurança da infraestrutura
+    tecnológica da organização, sustentando a operação de todos os sistemas
+    críticos de negócio 24x7.
+  principais_entregas:
+    - "Disponibilidade de infraestrutura ≥ 99,5% (SLA contratual)"
+    - "Operação do datacenter primário e DR"
+    - "Gestão de contratos de cloud e licenciamento"
+    - "Suporte técnico a 2.400 usuários internos"
+  projetos_ciclo_atual:
+    - nome: "Migração parcial para cloud (AWS)"
+      status: "em andamento"
+      impacto_orcamentario: "aumento de ~18% em serviços de terceiros no H2"
+      meses_impactados: [7, 8, 9, 10, 11, 12]
+    - nome: "Renovação de licenças Microsoft EA"
+      status: "concluído"
+      impacto_orcamentario: "desembolso concentrado em março (mês 3)"
+      meses_impactados: [3]
+
+# ── CONFIGURAÇÃO ANALÍTICA ────────────────────────────────────────────────────
+analitico:
+
+  # Rubricas relevantes para esta área (usadas para priorizar análise)
+  rubricas_prioritarias:
+    - codigo: "3.3.90.10"
+      nome: "Serviços de Terceiros - Cloud e Hosting"
+      peso: "alto"
+      observacao: "Crescimento estrutural esperado pela migração cloud"
+    - codigo: "3.3.90.20"
+      nome: "Licenças e Softwares"
+      peso: "alto"
+      observacao: "Pico de desembolso em março (renovação EA)"
+    - codigo: "3.1.10.01"
+      nome: "Pessoal - Salários e Encargos"
+      peso: "medio"
+      observacao: "Equipe estável, variação esperada apenas em agosto (PLR)"
+    - codigo: "3.3.50.05"
+      nome: "Manutenção de Equipamentos"
+      peso: "medio"
+      observacao: "Tende a concentrar no Q4 por contratos anuais"
+    - codigo: "3.4.10.02"
+      nome: "Treinamento e Capacitação"
+      peso: "baixo"
+      observacao: "Historicamente subexecutado — média de 60% de execução"
+
+  # Tolerâncias de desvio consideradas normais para esta área
+  tolerancias_desvio:
+    padrao_geral: 8          # % de desvio aceitável sem alerta
+    rubricas_volateis:       # rubricas com tolerância maior
+      - rubrica: "3.3.90.10"
+        tolerancia: 20       # cloud tem variação natural alta
+      - rubrica: "3.3.50.05"
+        tolerancia: 15
+    rubricas_rigidas:        # rubricas com tolerância menor
+      - rubrica: "3.1.10.01"
+        tolerancia: 3        # folha não deve desviar
+
+  # Sazonalidade conhecida (índice: 1.0 = mês médio)
+  sazonalidade:
+    descricao: >
+      Gasto concentra no H2 pela migração cloud. Março tem pico por licenças.
+      Dezembro tende a ter antecipação de contratos do ano seguinte.
+    indice_mensal:           # índice relativo ao mês médio
+      "2025-01": 0.75
+      "2025-02": 0.80
+      "2025-03": 1.45        # pico de licenças
+      "2025-04": 0.85
+      "2025-05": 0.88
+      "2025-06": 0.90
+      "2025-07": 1.10
+      "2025-08": 1.20        # PLR + início migração cloud
+      "2025-09": 1.25
+      "2025-10": 1.30
+      "2025-11": 1.25
+      "2025-12": 1.27        # antecipação de contratos
+
+# ── AUDIÊNCIA E TOM ───────────────────────────────────────────────────────────
+entrega:
+  audiencia_primaria: "gerente"           # cfo | diretor | gerente | analista
+  audiencia_secundaria: "diretor"
+  tom: "analitico"                        # executivo | analitico | consultivo | operacional
+  nivel_detalhe: "medio"                  # alto | medio | baixo
+  idioma: "pt-BR"
+  preferencias_narrativa:
+    - "Destacar riscos de estouro com antecedência"
+    - "Contextualizar desvios com eventos de negócio (migração cloud, licenças)"
+    - "Recomendar ação quando desvio for material e persistente"
+    - "Evitar jargão técnico de TI na parte financeira"
+
+# ── BENCHMARKS HISTÓRICOS ─────────────────────────────────────────────────────
+historico:
+  acuracia_orcamento_ciclos_anteriores:
+    "2024": 82               # % de acurácia no ciclo anterior
+    "2023": 78
+  execucao_media_historica: 91           # % médio de execução anual
+  vies_sistematico: "+4"                 # % de tendência a gastar acima do orçado
+  observacao: >
+    Área com histórico de leve superação do orçamento, principalmente
+    em serviços de terceiros. Planejamento tende a subestimar demanda de cloud.
